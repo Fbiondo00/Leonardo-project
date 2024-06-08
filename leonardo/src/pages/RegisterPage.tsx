@@ -1,17 +1,38 @@
-import React from 'react';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 
 export function RegisterForm() {
+	const words = [
+		{
+		  className: "text-white",
+		  text: "Nice to",
+		},
+		{
+		  text: "meet you!",
+		  className: "text-white",
+		},
+	  ];
   return (
-    <div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
-      <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center"></div>
-      <div className="relative z-10 flex justify-center items-center w-full h-full">
-        <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 rounded-2xl">
+	<div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
+	<div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
+	<div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
+	  <TypewriterEffectSmooth words={words} />
+	  <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
           <CardContent>
             <div className="grid gap-4">
+			<div className="grid gap-2">
+                <Label htmlFor="username">Full Name</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Full Name"
+                  required
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
