@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect';
 
-const ForgotPasswordPage: React.FC = () => {
+export const ForgotPasswordPage = () => {
   const words = [
 		{
 		  className: "text-white",
@@ -18,7 +17,7 @@ const ForgotPasswordPage: React.FC = () => {
 		},
 	  ];
   return (
-<div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
+    <div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
       <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
       <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
         <TypewriterEffectSmooth words={words} />

@@ -5,12 +5,10 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { url } from "inspector"
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect"
-import { Link } from "react-router-dom"
+import { Link } from "@tanstack/react-router"
 
-
-export function LoginForm() {
+export const LoginForm = () => {
 
   const words = [
     {
@@ -56,12 +54,10 @@ export function LoginForm() {
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              <Link to="/forgot-password" className="text-blue-500">Forgot Password?</Link>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?<a href="/register" className="text-blue-500">Register</a>{" "}
+              Don&apos;t have an account? <Link to="/signap" className="text-blue-500">Register</Link>{" "}
             </div>
-
           </CardContent>
         </Card>
       </div>
