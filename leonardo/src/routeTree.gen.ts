@@ -11,15 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignapImport } from './routes/signap'
+import { Route as SignupImport } from './routes/signup'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
+import { Route as DajeromaImport } from './routes/dajeroma'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
-const SignapRoute = SignapImport.update({
-  path: '/signap',
+const SignupRoute = SignupImport.update({
+  path: '/signup',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -30,6 +31,11 @@ const ProfileRoute = ProfileImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DajeromaRoute = DajeromaImport.update({
+  path: '/dajeroma',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -49,6 +55,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/dajeroma': {
+      id: '/dajeroma'
+      path: '/dajeroma'
+      fullPath: '/dajeroma'
+      preLoaderRoute: typeof DajeromaImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -63,11 +76,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
-    '/signap': {
-      id: '/signap'
-      path: '/signap'
-      fullPath: '/signap'
-      preLoaderRoute: typeof SignapImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
   }
@@ -77,9 +90,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  DajeromaRoute,
   LoginRoute,
   ProfileRoute,
-  SignapRoute,
+  SignupRoute,
 })
 
 /* prettier-ignore-end */
@@ -91,13 +105,17 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/dajeroma",
         "/login",
         "/profile",
-        "/signap"
+        "/signup"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/dajeroma": {
+      "filePath": "dajeroma.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -105,8 +123,8 @@ export const routeTree = rootRoute.addChildren({
     "/profile": {
       "filePath": "profile.tsx"
     },
-    "/signap": {
-      "filePath": "signap.tsx"
+    "/signup": {
+      "filePath": "signup.tsx"
     }
   }
 }

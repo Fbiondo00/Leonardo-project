@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 export function SignapStep1() {
 	return(
             <div className="grid gap-4">
-				<div className="grid gap-2">
+				      <div className="grid gap-2">
                 <Label htmlFor="username">Full Name</Label>
                 <Input
                   id="username"

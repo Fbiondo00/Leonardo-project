@@ -6,27 +6,43 @@ import { Link } from "@tanstack/react-router";
 import { SignapStep1 } from "./SignapStep1";
 import { SignapStep2 } from "./SignapStep2";
 import { useState } from "react";
+import { Progress } from "@/components/ui/progress"
 
 export function RegisterForm() {
 
   const [step, setStape] = useState(0)
 
   const HandleSubmit = () => {
-    if (step < 3)
+    if (step < 1)
     {
       setStape(step => step + 1);
     }
     console.log(step);
   };
 
+  const HandleSubmitBack = () => {
+    if (step > 0)
+    {
+      setStape(step => step - 1);
+    }
+    console.log(step);
+  };
 
 	const words = [
 	{
 	  className: "text-white",
-	  text: "Nice to",
+	  text: "Nice",
 	},
 	{
-	  text: "meet you!",
+	  className: "text-white",
+	  text: "to",
+	},
+	{
+	  text: "meet",
+	  className: "text-white",
+	},
+  {
+	  text: "you!",
 	  className: "text-white",
 	},
 	];
@@ -36,6 +52,9 @@ export function RegisterForm() {
 	  <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
 	    <TypewriterEffectSmooth words={words} />
 	    <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+        <div className="flex justify-center mb-5">
+          <Progress value={step * 50} className="w-[90%]"></Progress>
+        </div>
 		    <CardContent>
         {step === 0 &&
           <>
@@ -55,7 +74,13 @@ export function RegisterForm() {
         {step === 1 &&
           <>
             <SignapStep2 />
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-between mt-4">
+              <Button
+              type="submit"
+              className="w-1/3 bg-gray-600 text-white py-2 px-4 rounded-full shadow-custom"
+              onClick={HandleSubmitBack}>
+                  Back
+              </Button>
               <Button
               type="submit"
               className="w-1/3 bg-gray-600 text-white py-2 px-4 rounded-full shadow-custom"

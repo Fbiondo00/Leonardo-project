@@ -56,7 +56,7 @@ export const LoginForm = () => {
             <div className="mt-4 text-center text-sm">
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account? <Link to="/signap" className="text-blue-500">Register</Link>{" "}
+              Don&apos;t have an account? <Link to="/signup" className="text-blue-500">Register</Link>{" "}
             </div>
           </CardContent>
         </Card>
