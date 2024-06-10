@@ -8,16 +8,27 @@ import { SignapStep2 } from "./SignapStep2";
 import { useState } from "react";
 import { Progress } from "@/components/ui/progress"
 
+interface Registration {
+  username?: string;
+  fullName?:string;
+  email?: string;
+  password?: string;
+}
+
 export function RegisterForm() {
 
-  const [step, setStape] = useState(0)
+  const [allInfo, setAllInfo] = useState<Registration>();
+  const [step, setStape] = useState<number>(0)
 
-  const HandleSubmit = () => {
+  const HandleFirstSubmit = () => {
+    //if (step < 1 && allInfo?.email != undefined && allInfo?.fullName != undefined && allInfo?.username != undefined && allInfo?.password != undefined)
+    //{
+    //  setStape(step => step + 1);
+    //}
     if (step < 1)
     {
       setStape(step => step + 1);
     }
-    console.log(step);
   };
 
   const HandleSubmitBack = () => {
@@ -58,14 +69,12 @@ export function RegisterForm() {
 		    <CardContent>
         {step === 0 &&
           <>
-            <SignapStep1 />
+            <SignapStep1 setAllInfo={setAllInfo}/>
             <div className="flex justify-end mt-4">
               <Button
               type="submit"
-              //className="bg-gray-600 text-white py-1 px-2 rounded-full shadow-custom"
-              //className="w-full bg-gray-600 text-white py-2 px-4 rounded-full shadow-custom"
               className="w-1/3 bg-gray-600 text-white py-2 px-4 rounded-full shadow-custom"
-              onClick={HandleSubmit}>
+              onClick={HandleFirstSubmit}>
                   Next step
               </Button>
             </div>
@@ -84,7 +93,7 @@ export function RegisterForm() {
               <Button
               type="submit"
               className="w-1/3 bg-gray-600 text-white py-2 px-4 rounded-full shadow-custom"
-              onClick={HandleSubmit}>
+              >
                   Register
               </Button>
             </div>

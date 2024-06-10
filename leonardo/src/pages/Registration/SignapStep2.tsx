@@ -16,6 +16,7 @@ import preventionRegister from '@/assets/preventionRegister.jpg';
 import leisureRegisterImage from '@/assets/leisureRegister.jpg';
 import redingRegister from '@/assets/redingRegister.jpg';
 import sportRegister from '@/assets/sportRegister.jpg';
+import { Switch } from "@/components/ui/switch";
 
 
 
@@ -66,20 +67,48 @@ export function SignapStep2() {
         </div>
       </div>
       <div className="">
-        <Label htmlFor="interests">interests</Label>
+        <Label htmlFor="Interests">Interests</Label>
         <Carousel>
           <CarouselContent>
             <CarouselItem>
-              <DirectionAwareHover imageUrl={leisureRegisterImage} children="leisure"></DirectionAwareHover>
+              <DirectionAwareHover imageUrl={leisureRegisterImage} children={
+                <>
+                  <div className="flex items-center space-x-2">
+                    <Switch id="leisure" />
+                    <Label htmlFor="leisure">leisure</Label>
+                  </div>
+                </>
+              }></DirectionAwareHover>
             </CarouselItem>
             <CarouselItem>
-              <DirectionAwareHover imageUrl={sportRegister} children="sports"></DirectionAwareHover>
+              <DirectionAwareHover imageUrl={sportRegister} children={
+                <>
+                 <div className="flex items-center space-x-2">
+                   <Switch id="sports" />
+                   <Label htmlFor="sports">sports</Label>
+                 </div>
+                </>
+              }></DirectionAwareHover>
             </CarouselItem>
             <CarouselItem>
-              <DirectionAwareHover imageUrl={redingRegister} children="reading"></DirectionAwareHover>
+              <DirectionAwareHover imageUrl={redingRegister} children={
+                <>
+                <div className="flex items-center space-x-2">
+                  <Switch id="reading" />
+                  <Label htmlFor="reading">reading</Label>
+                </div>
+               </>
+              }></DirectionAwareHover>
             </CarouselItem>
             <CarouselItem>
-              <DirectionAwareHover imageUrl={preventionRegister} children="prevention"></DirectionAwareHover>
+              <DirectionAwareHover imageUrl={preventionRegister} children={
+                <>
+                <div className="flex items-center space-x-2">
+                  <Switch id="prevention" />
+                  <Label htmlFor="prevention">prevention</Label>
+                </div>
+               </>
+              }></DirectionAwareHover>
             </CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
@@ -89,5 +118,3 @@ export function SignapStep2() {
     </div>
 	);
 }
-
-              //<DirectionAwareHover imageUrl={""} children="leisure"></DirectionAwareHover>
