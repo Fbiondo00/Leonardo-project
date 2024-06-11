@@ -29,7 +29,7 @@ export function SignapStep2() {
         <DatePickerDemo/>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="username">Marital status</Label>
+        <Label htmlFor="MaritalStatus">Marital status</Label>
         <Select>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Marital status" />
@@ -67,7 +67,7 @@ export function SignapStep2() {
         </div>
       </div>
       <div className="">
-        <Label htmlFor="Interests">Interests</Label>
+        <Label htmlFor="Interests ">Interests</Label>
         <Carousel>
           <CarouselContent>
             <CarouselItem>

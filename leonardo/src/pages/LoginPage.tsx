@@ -12,12 +12,12 @@ export const LoginForm = () => {
 
   const words = [
     {
-      className: "text-white",
+      className: '',
       text: "Welcome",
     },
     {
       text: "Back",
-      className: "text-white",
+      className: "",
     },
   ];
 

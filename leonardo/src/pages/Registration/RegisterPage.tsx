@@ -39,24 +39,18 @@ export function RegisterForm() {
     console.log(step);
   };
 
-	const words = [
-	{
-	  className: "text-white",
-	  text: "Nice",
-	},
-	{
-	  className: "text-white",
-	  text: "to",
-	},
-	{
-	  text: "meet",
-	  className: "text-white",
-	},
-  {
-	  text: "you!",
-	  className: "text-white",
-	},
-	];
+
+  const words = [
+    {
+      className: '',
+      text: "Nice to",
+    },
+    {
+      text: "meet you!",
+      className: "",
+    },
+  ];
+
   return (
 	<div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
 	  <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>

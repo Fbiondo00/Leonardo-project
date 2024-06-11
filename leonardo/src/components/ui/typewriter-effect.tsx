@@ -126,7 +126,7 @@ export const TypewriterEffectSmooth = ({
               {word.text.map((char, index) => (
                 <span
                   key={`char-${index}`}
-                  className={cn(`dark:text-white text-black `, word.className)}
+                  className={cn(`bg-clip-text text-transparent clip-text to-50% bg-gradient-to-t from-white/0 to-white `, word.className)}
                 >
                   {char}
                 </span>
