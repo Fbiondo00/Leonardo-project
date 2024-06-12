@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import React from 'react'
 import './index.css';
+import SessionProvider from './context/sessionProvider';
 
 const router = createRouter({ routeTree })
 
@@ -19,8 +20,10 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <React.StrictMode>
+      <SessionProvider>
       <RouterProvider router={router} />
-    </React.StrictMode>,
+      </SessionProvider>
+  </React.StrictMode>
   )
 }
 
