@@ -11,9 +11,10 @@ interface Registration {
 
 interface SignapStep1Props {
   setAllInfo: React.Dispatch<React.SetStateAction<Registration | undefined>>;
+  setCk: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function SignapStep1({ setAllInfo }: SignapStep1Props) {
+export function SignapStep1({ setAllInfo, setCk}: SignapStep1Props) {
 
   const [psw , setPsw] = useState<string>("");
   const [error, setError] = useState<number>(0);
@@ -35,6 +36,7 @@ export function SignapStep1({ setAllInfo }: SignapStep1Props) {
 
 
   const handleFullNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setCk(true);
     setAllInfo((prevInfo) => ({
       ...prevInfo,
       fullName: e.target.value,
@@ -42,6 +44,7 @@ export function SignapStep1({ setAllInfo }: SignapStep1Props) {
   };
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setCk(true);
     setAllInfo((prevInfo) => ({
       ...prevInfo,
       username: e.target.value,
@@ -49,6 +52,7 @@ export function SignapStep1({ setAllInfo }: SignapStep1Props) {
   };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setCk(true);
     if (validateEmail(e.target.value) == false)
     {
       setAllInfo((prevInfo) => ({
@@ -68,6 +72,7 @@ export function SignapStep1({ setAllInfo }: SignapStep1Props) {
   };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setCk(true);
     if (validatePassword(e.target.value) == false)
       setError(2);
     else
@@ -78,6 +83,7 @@ export function SignapStep1({ setAllInfo }: SignapStep1Props) {
   };
 
   const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setCk(true);
     if (validateConfirmPassword(e.target.value) == false)
     {
       setAllInfo((prevInfo) => ({
@@ -147,7 +153,7 @@ export function SignapStep1({ setAllInfo }: SignapStep1Props) {
                 />
                 { error == 2 &&
                   <>
-                    <span className="text-red-500">Psw non valida</span>
+                    <span className="text-red-500">Password non valida</span>
                   </>
                 }
               </div>
