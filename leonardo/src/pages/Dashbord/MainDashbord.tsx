@@ -1,19 +1,17 @@
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
-import "swiper/css";
-import DashbordSlider from "./Dashbord_Slider";
+import LNavBar from "../LeonardoNavBar";
 
-export const Dashbord = () => {
+
+export const Dashboard = () => {
   return (
-    <div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
-      <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
-      <div className="w-[45%] h-[40%] rounded-lg">
-        <DashbordSlider></DashbordSlider>
+    <div className="w-full h-[100vh] bg-leonardoRed">
+      <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20"></div>
+      <LNavBar></LNavBar>
+      <div className="flex flex-col md:flex-row justify-center items-center w-full h-full rounded-lg">
+        daje
       </div>
     </div>
   );
 }
 
-export default Dashbord;
+export default Dashboard;
