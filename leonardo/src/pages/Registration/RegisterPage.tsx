@@ -24,16 +24,8 @@ export function RegisterForm() {
   const HandleFirstSubmit = () => {
     // if (step < 1 && allInfo?.email != undefined && allInfo?.fullName != undefined && allInfo?.username != undefined && allInfo?.password != undefined)
     // {
-    //   setStape(step => step + 1);
-    // }
-    // else
-    // {
-    //   setCk(false);
-    // }
-    if (step < 1)
-    {
      setStape(step => step + 1);
-    }
+    // }
   };
 
   const HandleSubmitBack = () => {
