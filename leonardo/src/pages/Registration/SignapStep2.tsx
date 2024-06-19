@@ -4,30 +4,46 @@ import { Label } from "@/components/ui/label";
 import { DatePickerDemo } from "@/components/ui/datepicker";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-import { DirectionAwareHover } from "@/components/ui/direction-aware-hover";
-import preventionRegister from '@/assets/preventionRegister.jpg';
-import leisureRegisterImage from '@/assets/leisureRegister.jpg';
-import redingRegister from '@/assets/redingRegister.jpg';
-import sportRegister from '@/assets/sportRegister.jpg';
-import { Switch } from "@/components/ui/switch";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 
+const schema = yup.object().shape({
+  birthdate: yup
+    .date()
+    .required('La data di nascita è obbligatoria')
+    .typeError('Inserisci una data valida'),
+  status: yup
+    .string()
+    .required('Lo stato è obbligatorio')
+    .oneOf(['active', 'inactive'], 'Stato non valido'),
+});
 
 export function SignapStep2() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
 
 	return(
     <div className="grid gap-4">
-		  <div className="grid gap-2">
-        <Label htmlFor="username">Date of birth</Label>
-        <DatePickerDemo/>
-      </div>
+		  <div className="flex flex-col">
+          <label className="text-sm font-medium">Data di nascita</label>
+          <input
+            type="date"
+            {...register('birthdate')}
+            className="border border-gray-300 rounded p-2 mt-1"
+          />
+          {errors.birthdate && (
+            <span className="text-red-500 text-sm">{errors.birthdate.message}</span>
+          )}
+        </div>
+
       <div className="grid gap-2">
         <Label htmlFor="MaritalStatus">Marital status</Label>
         <Select>
@@ -66,55 +82,43 @@ export function SignapStep2() {
           </div>
         </div>
       </div>
-      <div className="">
-        <Label htmlFor="Interests ">Interests</Label>
-        <Carousel>
-          <CarouselContent>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={leisureRegisterImage} children={
-                <>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="leisure" />
-                    <Label htmlFor="leisure">leisure</Label>
-                  </div>
-                </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={sportRegister} children={
-                <>
-                 <div className="flex items-center space-x-2">
-                   <Switch id="sports" />
-                   <Label htmlFor="sports">sports</Label>
-                 </div>
-                </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={redingRegister} children={
-                <>
-                <div className="flex items-center space-x-2">
-                  <Switch id="reading" />
-                  <Label htmlFor="reading">reading</Label>
-                </div>
-               </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={preventionRegister} children={
-                <>
-                <div className="flex items-center space-x-2">
-                  <Switch id="prevention" />
-                  <Label htmlFor="prevention">prevention</Label>
-                </div>
-               </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+      <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+             afalcone gay
+            </label>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              afalcone gay
+            </label>
+      </div>
+    </div>
+    <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              afalcone gay
+            </label>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              afalcone gay
+            </label>
+      </div>
       </div>
     </div>
 	);
 }
+

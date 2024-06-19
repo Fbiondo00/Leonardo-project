@@ -12,15 +12,20 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
+import { Route as SearchImport } from './routes/search'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
-import { Route as DajeromaImport } from './routes/dajeroma'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({
   path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SearchRoute = SearchImport.update({
+  path: '/search',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -31,11 +36,6 @@ const ProfileRoute = ProfileImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DajeromaRoute = DajeromaImport.update({
-  path: '/dajeroma',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -55,13 +55,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dajeroma': {
-      id: '/dajeroma'
-      path: '/dajeroma'
-      fullPath: '/dajeroma'
-      preLoaderRoute: typeof DajeromaImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -74,6 +67,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchImport
       parentRoute: typeof rootRoute
     }
     '/signup': {
@@ -90,9 +90,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  DajeromaRoute,
   LoginRoute,
   ProfileRoute,
+  SearchRoute,
   SignupRoute,
 })
 
@@ -105,23 +105,23 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dajeroma",
         "/login",
         "/profile",
+        "/search",
         "/signup"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dajeroma": {
-      "filePath": "dajeroma.tsx"
-    },
     "/login": {
       "filePath": "login.tsx"
     },
     "/profile": {
       "filePath": "profile.tsx"
+    },
+    "/search": {
+      "filePath": "search.tsx"
     },
     "/signup": {
       "filePath": "signup.tsx"

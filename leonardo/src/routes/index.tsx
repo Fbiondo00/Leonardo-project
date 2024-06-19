@@ -1,4 +1,6 @@
-import { useSession } from '@/context/sessionProvider'
+
+import Dashbord from '@/pages/Dashbord/MainDashbord'
+import { useSession } from '../context/sessionProvider'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -8,6 +10,6 @@ export const Route = createFileRoute('/')({
 
     console.log("daje roma daje ",session?.user.name)
 
-    return <div>Hello /! daje roma</div>
+    return <Dashbord></Dashbord>
   }
 })
