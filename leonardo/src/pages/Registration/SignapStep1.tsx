@@ -104,7 +104,7 @@ export function SignapStep1({ setAllInfo, setCk}: SignapStep1Props) {
 
 
 	return(
-            <div className="grid gap-4">
+            <div className="grid gap-3">
 				      <div className="grid gap-2">
                 <Label htmlFor="username">Full Name</Label>
                 <Input

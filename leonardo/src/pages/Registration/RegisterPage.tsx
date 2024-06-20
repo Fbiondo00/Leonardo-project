@@ -53,15 +53,15 @@ export function RegisterForm() {
 	  <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
 	  <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
 	    <TypewriterEffectSmooth words={words} />
-	    <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+	    <Card className="mx-auto w-full w-[90%]  md:max-w-xl p-6  ">
         <div className="flex justify-center mb-5">
-          <Progress value={step * 50} className="w-[90%]"></Progress>
+          <Progress value={(step * 50) + 25} className="w-[90%]"></Progress>
         </div>
 		    <CardContent>
         {step === 0 &&
           <>
             <SignapStep1 setAllInfo={setAllInfo} setCk={setCk}/>
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end">
               {
                 ck == false &&
                   <div className="flex justify-between w-full">
@@ -104,7 +104,7 @@ export function RegisterForm() {
           </>
         }
         </CardContent>
-          <CardFooter className="flex justify-center text-sm">
+          <CardFooter className="flex justify-center text-sm p-0">
             Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
           </CardFooter>
         </Card>
