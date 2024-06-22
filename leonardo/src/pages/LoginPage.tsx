@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect"
 import { Link } from "@tanstack/react-router"
+import WelfareToggleRight from "@/components/ui/welfaretoggleright"
+import WelfareToggleLeft from "@/components/ui/welfatoggleleft"
+
 
 export const LoginForm = () => {
 
@@ -24,9 +27,11 @@ export const LoginForm = () => {
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
       <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
-      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
+      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full  ">
         <TypewriterEffectSmooth words={words} />
         <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+        <WelfareToggleRight />
+        <WelfareToggleLeft />
           <CardContent >
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -42,7 +47,6 @@ export const LoginForm = () => {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-
                 <Input
                   id="password"
                   type="password"
@@ -60,6 +64,12 @@ export const LoginForm = () => {
             </div>
           </CardContent>
         </Card>
+            <div className="fixed bottom-0 left-0 w-full py-4 gray-100 text-center text-sm text-gray-600">
+          <a href="/regolamento" className="mx-2 text-black-600 hover:underline">Regolamento</a> |
+          <a href="/condizioni" className="mx-2 text-black-600 hover:underline">Condizioni d'uso</a> |
+          <a href="/privacy" className="mx-2 text-black-600 hover:underline">Privacy</a> |
+          <a href="/sicurezza" className="mx-2 text-black-600 hover:underline">Sicurezza</a>
+        </div>
       </div>
     </div>
   )
