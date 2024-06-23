@@ -43,7 +43,7 @@ export const LoginForm = () => {
                 <div className="flex items-center gap-[17rem]">
                   <Label htmlFor="password">Password</Label>
                   <div className="mt-1 text-center text-sm">
-                    <Link to="/signup" className="text-red-500">Forgot Password?</Link>{" "}
+                    <Link to="/signup" className="text-red-500 hover:underline">Forgot Password?</Link>{" "}
                   </div>
                 </div>
                 <Input
@@ -52,12 +52,12 @@ export const LoginForm = () => {
                   placeholder="*********"
                   required />
               </div>
-              <Button type="submit" className="w-full bg-gray-700 text-white py-2 px-4 rounded-full shadow-custom">
+              <Button type="submit" className="w-full bg-leonardoBlue text-white py-2 px-4 rounded-full shadow-custom">
                 Login
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account? <Link to="/signup" className="text-blue-500">Register</Link>{" "}
+              Don&apos;t have an account? <Link to="/signup" className="text-blue-600 hover:underline">Register</Link>{" "}
             </div>
           </CardContent>
         </Card>
