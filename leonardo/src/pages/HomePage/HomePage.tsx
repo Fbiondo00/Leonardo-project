@@ -9,15 +9,12 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
-      <div className="flex overflow-x-auto">
-        <div className="flex justify-center">
-          <div className="flex space-x-4">
+      <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
+      <div className="flex fixed transform  md:fixed md:top-1/2 md:left-auto md:transform md:-translate-y-1/2 md:translate-x-0 bottom-4 md:bottom-auto">
             <ThreeDCardDemo />
             <ThreeDCardDemo />
             <ThreeDCardDemo />
             <ThreeDCardDemo />
-          </div>
-        </div>
       </div>
     </div>
   );
