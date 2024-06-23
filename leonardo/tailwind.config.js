@@ -18,13 +18,18 @@ module.exports = {
 	  },
 	  extend: {
 		boxShadow: {
-		  'custom': '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',
+		  'custom': '0 4px 6px rgba(255, 255, 255, 1), 0 1px 3px rgba(0, 0, 0, 0.08)',
+		  'red-glow': '0 0 20px rgba(255, 28, 47, 0.35)',
 		},
 		backgroundImage: {
 		  "loginForm": "url('./src/assets/login.png')",
+
+		},
+		welfareison:{
+			"loginForms" : "url('./src/assets/welfareison.png')"
 		},
 		colors: {
-		  leonardoRed: '#EC0928',
+		  leonardoRed: '#ebebeb',
 		  border: "hsl(var(--border))",
 		  input: "hsl(var(--input))",
 		  ring: "hsl(var(--ring))",

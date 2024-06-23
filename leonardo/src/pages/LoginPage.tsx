@@ -7,26 +7,27 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect"
 import { Link } from "@tanstack/react-router"
+import WelfareToggleRight from "@/components/ui/welfaretoggleright"
+import WelfareToggleLeft from "@/components/ui/welfatoggleleft"
+
 
 export const LoginForm = () => {
 
   const words = [
     {
-      className: '',
-      text: "Welcome",
-    },
-    {
-      text: "Back",
-      className: "",
+      className: 'text-4xl font-bold text-gray-700',
+      text: "Welcome Back",
     },
   ];
 
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
-      <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
-      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
-        <TypewriterEffectSmooth words={words} />
-        <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+      <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20"></div>
+      <WelfareToggleRight />
+      <WelfareToggleLeft />
+      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full  ">
+        <TypewriterEffectSmooth words={words}/>
+        <Card className="mx-auto w-full md:max-w-lg pt-6 ">
           <CardContent >
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -39,10 +40,12 @@ export const LoginForm = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
+                <div className="flex items-center gap-[17rem]">
                   <Label htmlFor="password">Password</Label>
+                  <div className="mt-1 text-center text-sm">
+                    <Link to="/signup" className="text-red-500">Forgot Password?</Link>{" "}
+                  </div>
                 </div>
-
                 <Input
                   id="password"
                   type="password"
@@ -54,12 +57,16 @@ export const LoginForm = () => {
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-            </div>
-            <div className="mt-4 text-center text-sm">
               Don&apos;t have an account? <Link to="/signup" className="text-blue-500">Register</Link>{" "}
             </div>
           </CardContent>
         </Card>
+          <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-sm text-gray-600">
+          <a href="/regolamento" className="mx-2 text-black-600 hover:underline">Regolamento</a> |
+          <a href="/condizioni" className="mx-2 text-black-600 hover:underline">Condizioni d'uso</a> |
+          <a href="/privacy" className="mx-2 text-black-600 hover:underline">Privacy</a> |
+          <a href="/sicurezza" className="mx-2 text-black-600 hover:underline">Sicurezza</a>
+        </div>
       </div>
     </div>
   )
