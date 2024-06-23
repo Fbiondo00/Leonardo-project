@@ -30,6 +30,9 @@ module.exports = {
 		},
 		colors: {
 		  leonardoRed: '#ebebeb',
+		  leonardoRed2: '#EC0928',
+		  leonardoGrey : '#3A414D',
+		  leonardoBlue : '#38586C',
 		  border: "hsl(var(--border))",
 		  input: "hsl(var(--input))",
 		  ring: "hsl(var(--ring))",

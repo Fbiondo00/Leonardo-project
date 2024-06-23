@@ -16,7 +16,7 @@ export const LoginForm = () => {
   const words = [
     {
       className: 'text-4xl font-bold text-gray-700',
-      text: "Welcome Back",
+      text: "Welcome Back!",
     },
   ];
 
@@ -25,9 +25,9 @@ export const LoginForm = () => {
       <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20"></div>
       <WelfareToggleRight />
       <WelfareToggleLeft />
-      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full  ">
+      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
         <TypewriterEffectSmooth words={words}/>
-        <Card className="mx-auto w-full md:max-w-lg pt-6 ">
+        <Card className="mx-auto w-full md:max-w-lg pt-6">
           <CardContent >
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -61,7 +61,7 @@ export const LoginForm = () => {
             </div>
           </CardContent>
         </Card>
-          <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-sm text-gray-600">
+          <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-xs text-gray-600">
           <a href="/regolamento" className="mx-2 text-black-600 hover:underline">Regolamento</a> |
           <a href="/condizioni" className="mx-2 text-black-600 hover:underline">Condizioni d'uso</a> |
           <a href="/privacy" className="mx-2 text-black-600 hover:underline">Privacy</a> |

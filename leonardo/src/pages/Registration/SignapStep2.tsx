@@ -35,7 +35,8 @@ export function SignapStep2() {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid gap-2">
+      <div className="grid gap-2 mt-2">
+        <label className="text-sm font-medium">Do you have: </label>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Checkbox id="terms" />
@@ -43,7 +44,7 @@ export function SignapStep2() {
               htmlFor="terms"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Have children
+              Children
             </label>
           </div>
           <div className="flex items-center space-x-2">
@@ -52,10 +53,13 @@ export function SignapStep2() {
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              elderly parents
+              Elderly parents
             </label>
           </div>
         </div>
+      </div>
+      <div className="grid gap-2 mt-2">
+        <label className="text-sm font-medium">Interests: </label>
       </div>
       <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
