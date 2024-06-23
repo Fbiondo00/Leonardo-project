@@ -16,9 +16,12 @@ module.exports = {
 		  "2xl": "1400px",
 		},
 	  },
+
 	  extend: {
 		boxShadow: {
+									// 255, 255, 255, 1
 		  'custom': '0 4px 6px rgba(255, 255, 255, 1), 0 1px 3px rgba(0, 0, 0, 0.08)',
+		  'red-glow': '0 0 15px rgba(255, 0, 0, 0.5)',
 		},
 		backgroundImage: {
 		  "loginForm": "url('./src/assets/login.png')",

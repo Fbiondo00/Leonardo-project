@@ -82,31 +82,90 @@ export function SignapStep2() {
           </div>
         </div>
       </div>
+      Interessi:
+      <div className="flex items-center space-x-2">
       <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
             <label
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-             afalcone gay
+             afalcone
             </label>
+            </div>
             <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
             <label
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              afalcone gay
+             afalcone
+            </label>
+            </div>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+             afalcone
+            </label>
+            </div>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+             afalcone
+            </label>
+            </div>
+            <div className="flex items-center space-x-2">
+
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              afalcone
             </label>
       </div>
     </div>
+    <div className="flex items-center space-x-2">
     <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
             <label
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              afalcone gay
+             afalcone
+            </label>
+            </div>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+             afalcone
+            </label>
+            </div>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+             afalcone
+            </label>
+            </div>
+    <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              afalcone
             </label>
             <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
@@ -114,8 +173,9 @@ export function SignapStep2() {
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              afalcone gay
+              afalcone
             </label>
+      </div>
       </div>
       </div>
     </div>

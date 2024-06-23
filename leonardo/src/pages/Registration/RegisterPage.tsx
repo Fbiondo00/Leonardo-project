@@ -61,9 +61,9 @@ export function RegisterForm() {
   return (
 	<div className="relative flex justify-center items-center w-full h-[100vh] bg-leonardoRed">
 	  <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
-	  <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
+	  <div className=" absolute inset-0 flex flex-col justify-center items-center w-full h-full">
 	    <TypewriterEffectSmooth words={words} />
-	    <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+	    <Card className="mx-auto w-full w-[40%] dmd:max-w-xl p-4">
       <WelfareToggleRight />
       <WelfareToggleLeft />
         <div className="flex justify-center mb-5">

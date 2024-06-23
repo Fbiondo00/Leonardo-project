@@ -29,11 +29,11 @@ export const LoginForm = () => {
       <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20 "></div>
       <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full  ">
         <TypewriterEffectSmooth words={words} />
-        <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+        <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6">
         <WelfareToggleRight />
         <WelfareToggleLeft />
           <CardContent >
-            <div className="grid gap-4">
+            <div className="grid gap-4 ">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
