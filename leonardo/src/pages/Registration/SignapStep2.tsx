@@ -61,13 +61,13 @@ export function SignapStep2() {
       <div className="grid gap-2 mt-2">
         <label className="text-sm font-medium">Interests: </label>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center justify-center space-x-2">
             <Checkbox id="newsletter" />
             <label
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-            w pilastri
+            welfare pilastri
             </label>
             <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
@@ -75,17 +75,14 @@ export function SignapStep2() {
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-            w pilastri
+            welfare pilastri
             </label>
-      </div>
-    </div>
-    <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
             <label
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-            w pilastri
+            welfare pilastri
             </label>
             <div className="flex items-center space-x-2">
             <Checkbox id="newsletter" />
@@ -93,11 +90,12 @@ export function SignapStep2() {
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-            w pilastri
+            welfare pilastri
             </label>
       </div>
-      </div>
     </div>
+    </div>
+  </div>
 	);
 }
 
