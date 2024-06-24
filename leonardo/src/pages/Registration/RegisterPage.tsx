@@ -53,7 +53,7 @@ export function RegisterForm() {
     <WelfareToggleLeft />
     <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
 	    <TypewriterEffectSmooth words={words} />
-	    <Card className="mx-auto w-full md:max-w-xl pt-6">
+	    <Card className="mx-auto w-full md:max-w-xl pt-6 mt-[-20px]">
         <div className="flex justify-center mb-6">
           <Progress value={(step * 50) + 25} className="w-[90%]"></Progress>
         </div>
@@ -68,7 +68,7 @@ export function RegisterForm() {
                     <span className="text-red-500">Dati non validi</span>
                     <Button
                     type="submit"
-                    className="w-1/3 bg-leonardoBlue text-white py-2 px-4 rounded-full shadow-custom"
+                    className="w-1/3 bg-leonardoGrey text-white py-2 px-4 rounded-full shadow-custom"
                     onClick={HandleFirstSubmit}>
                         Next step
                     </Button>
@@ -76,7 +76,7 @@ export function RegisterForm() {
                 ||
                   <Button
                   type="submit"
-                  className="w-1/3 bg-leonardoBlue text-white py-2 px-4 rounded-full shadow-custom"
+                  className="w-1/3 bg-leonardoGrey text-white py-2 px-4 rounded-full shadow-custom"
                   onClick={HandleFirstSubmit}>
                       Next step
                   </Button>
@@ -90,13 +90,13 @@ export function RegisterForm() {
             <div className="flex justify-between mt-5">
               <Button
               type="submit"
-              className="w-1/3 bg-leonardoBlue text-white py-2 px-4 rounded-full shadow-custom"
+              className="w-1/3 bg-leonardoGrey text-white py-2 px-4 rounded-full shadow-custom"
               onClick={HandleSubmitBack}>
                   Back
               </Button>
               <Button
               type="submit"
-              className="w-1/3 bg-leonardoBlue text-white py-2 px-4 rounded-full shadow-custom"
+              className="w-1/3 bg-leonardoGrey text-white py-2 px-4 rounded-full shadow-custom"
               >
                   Register
               </Button>

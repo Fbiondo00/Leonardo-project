@@ -18,7 +18,7 @@ module.exports = {
 	  },
 	  extend: {
 		boxShadow: {
-		  'custom': '0 2px 5px rgba(24, 24, 1, 0.4), 0 1px 3px rgba(0, 0, 0, 0.08)',
+		  'custom': '0 2px 5px rgba(24, 24, 1, 0.4)',
 		  'red-glow': '0 0 20px rgba(255, 28, 47, 0.35)',
 		},
 		backgroundImage: {
