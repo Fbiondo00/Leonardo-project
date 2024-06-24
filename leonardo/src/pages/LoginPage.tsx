@@ -16,7 +16,7 @@ export const LoginForm = () => {
   const words = [
     {
       className: 'text-4xl font-bold text-gray-700',
-      text: "Welcome Back",
+      text: "Welcome Back!",
     },
   ];
 
@@ -25,9 +25,9 @@ export const LoginForm = () => {
       <div className="absolute inset-0 w-full h-full bg-loginForm bg-contain bg-no-repeat bg-center filter opacity-20"></div>
       <WelfareToggleRight />
       <WelfareToggleLeft />
-      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full  ">
+      <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
         <TypewriterEffectSmooth words={words}/>
-        <Card className="mx-auto w-full md:max-w-lg pt-6 ">
+        <Card className="mx-auto w-full md:max-w-lg pt-6 mt-[-20px]">
           <CardContent >
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -39,11 +39,11 @@ export const LoginForm = () => {
                   required
                 />
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center gap-[17rem]">
+              <div className="grid gap-1">
+                <div className="flex items-center gap-[19rem]">
                   <Label htmlFor="password">Password</Label>
-                  <div className="mt-1 text-center text-sm">
-                    <Link to="/signup" className="text-red-500">Forgot Password?</Link>{" "}
+                  <div className="mt-1 text-center text-xs">
+                    <Link to="/signup" className="text-red-500 hover:underline">Forgot Password?</Link>{" "}
                   </div>
                 </div>
                 <Input
@@ -52,16 +52,16 @@ export const LoginForm = () => {
                   placeholder="*********"
                   required />
               </div>
-              <Button type="submit" className="w-full bg-gray-700 text-white py-2 px-4 rounded-full shadow-custom">
+              <Button type="submit" className="w-full bg-leonardoGrey text-white py-2 px-4 rounded-full shadow-custom">
                 Login
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account? <Link to="/signup" className="text-blue-500">Register</Link>{" "}
+              Don&apos;t have an account? <Link to="/signup" className="text-blue-600 hover:underline">Register</Link>{" "}
             </div>
           </CardContent>
         </Card>
-          <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-sm text-gray-600">
+          <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-xs text-gray-600">
           <a href="/regolamento" className="mx-2 text-black-600 hover:underline">Regolamento</a> |
           <a href="/condizioni" className="mx-2 text-black-600 hover:underline">Condizioni d'uso</a> |
           <a href="/privacy" className="mx-2 text-black-600 hover:underline">Privacy</a> |
