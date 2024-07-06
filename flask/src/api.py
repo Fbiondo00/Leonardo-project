@@ -1,3 +1,4 @@
+import os
 import http.client
 import json
 
@@ -21,10 +22,18 @@ def manage_sensitive(name: str):
     if existence:
         v2 = open(secret_fpath).read().rstrip('\n')
         return v2
-    return KeyError(f'{name}')
+    raise KeyError(f'{name}')
 
-mongoClient = MongoClient(config("MONGO_HOST", default="localhost"), config("MONGO_PORT", cast=int, default=27017), username=manage_sensitive("mongo_user"), password=manage_sensitive("mongo_pass"))
-users = mongoClient.neurldb.users
+try:
+    mongoClient = MongoClient(
+        config("MONGO_HOST", default="localhost"),
+        config("MONGO_PORT", cast=int, default=27017),
+        username=manage_sensitive("mongo_user"),
+        password=manage_sensitive("mongo_pass")
+    )
+    users = mongoClient.neurldb.users
+except Exception as e:
+    print(f"Error connecting to MongoDB: {e}")
 
 app = Flask(__name__)
 app.secret_key = config("SECRET_KEY")
@@ -32,41 +41,43 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 
-
 @app.route('/')
 def hello_world():
     return "Hello World"
 
-
 @login_manager.user_loader
 def load_user(user_id):
-    user = UserMixin()
-    user.id = user_id
-    user.data = users.find_one({"_id": ObjectId(user_id)}, {"_id": 0, "password": 0})
-    print(user.data, type(user.data))
-    if user.data:
-        return user
-    return
-
+    try:
+        user = UserMixin()
+        user.id = user_id
+        user.data = users.find_one({"_id": ObjectId(user_id)}, {"_id": 0, "password": 0})
+        print(user.data, type(user.data))
+        if user.data:
+            return user
+    except Exception as e:
+        print(f"Error loading user: {e}")
+    return None
 
 @login_manager.unauthorized_handler
 def unauthorized():
     return '{"error": "Unauthorized"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
 
-
 @app.route("/login", methods=['POST'])
 def login():
-    data = json.loads(request.data.decode("utf-8"))
-    if "password" not in data or "email" not in data:
-        return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
-    user = UserMixin()
-    user.data = users.find_one({"email": escape(data["email"])})
-    if not user.data or not bcrypt.check_password_hash(user.data.pop("password"), data["password"]):
-        return '{"error":"invalid user"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
-    user.id = str(user.data.pop("_id"))
-    login_user(user, True)
-    return '{"success":"true"}'
-
+    try:
+        data = json.loads(request.data.decode("utf-8"))
+        if "password" not in data or "email" not in data:
+            return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
+        user = UserMixin()
+        user.data = users.find_one({"email": escape(data["email"])})
+        if not user.data or not bcrypt.check_password_hash(user.data.pop("password"), data["password"]):
+            return '{"error":"invalid user"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
+        user.id = str(user.data.pop("_id"))
+        login_user(user, True)
+        return '{"success":"true"}'
+    except Exception as e:
+        print(f"Error during login: {e}")
+        return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
 @app.route("/logout")
 @login_required
@@ -74,40 +85,45 @@ def logout():
     logout_user()
     return '{"success":"true"}'
 
-
 @app.route("/create_user", methods=['POST'])
 def create_user():
-    data = json.loads(request.data.decode("utf-8"))
-    print("JSON Data", type(data), data)
-    user = users.find_one({"email": data["email"]})
-    if user is not None:
-        return '{"error": "User already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
-    user = UserMixin()
-    user.data = {
-        "password": bcrypt.generate_password_hash(data["password"])
-    }
-    for key in data:
-        if isinstance(data[key], str) and key != "password":
-            user.data[key] = escape(data[key])
-        print(key, type(data[key]))
-    if "children" in data:
-        user.data["children"] = []
-        for child_data in data["children"]:
-            child = {}
-            for key in child_data:
-                if isinstance(child_data[key], str):
-                    child[key] = escape(child_data[key])
-            user.data["children"].append(child)
-    user.id = users.insert_one(user.data).inserted_id
-    login_user(user, True)
-    return '{"success": "true"}', HTTPStatus.OK, {'Content-Type': 'application/json'}
-
+    try:
+        data = json.loads(request.data.decode("utf-8"))
+        print("JSON Data", type(data), data)
+        user = users.find_one({"email": data["email"]})
+        if user is not None:
+            return '{"error": "User already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
+        user = UserMixin()
+        user.data = {
+            "password": bcrypt.generate_password_hash(data["password"])
+        }
+        for key in data:
+            if isinstance(data[key], str) and key != "password":
+                user.data[key] = escape(data[key])
+            print(key, type(data[key]))
+        if "children" in data:
+            user.data["children"] = []
+            for child_data in data["children"]:
+                child = {}
+                for key in child_data:
+                    if isinstance(child_data[key], str):
+                        child[key] = escape(child_data[key])
+                user.data["children"].append(child)
+        user.id = users.insert_one(user.data).inserted_id
+        login_user(user, True)
+        return '{"success": "true"}', HTTPStatus.OK, {'Content-Type': 'application/json'}
+    except Exception as e:
+        print(f"Error creating user: {e}")
+        return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
 @app.route("/get_user", methods=['GET'])
 @login_required
 def get_user():
-    return json.dumps(current_user.data)
-
+    try:
+        return json.dumps(current_user.data)
+    except Exception as e:
+        print(f"Error getting user: {e}")
+        return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
 if __name__ == '__main__':
     app.run(port=1337, debug=config("DEBUG", cast=bool), threaded=True)
