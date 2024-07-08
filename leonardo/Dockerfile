@@ -1,11 +1,12 @@
-FROM node:10-alpine AS PROD
+FROM node:22 AS PROD
 VOLUME [ "/app" ]
 WORKDIR "/app"
-VOLUME [ "/build" ]
-ENV BUILD_PATH = "/build"
+COPY package.json .
+RUN npm install
+COPY . .
 CMD npm run build
 
-FROM node:10-alpine AS DEV
+FROM node:22 AS DEV
 VOLUME [ "/app" ]
 WORKDIR "/app"
 ENV PORT = 8000

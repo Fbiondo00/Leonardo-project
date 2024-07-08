@@ -1,4 +1,4 @@
-FROM python:3.11-slim AS BUILD
+FROM python:3 AS BUILD
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/api.py /app/
 
-FROM python:3.8-slim AS PROD
+FROM python:3 AS PROD
 
 WORKDIR /app
 
