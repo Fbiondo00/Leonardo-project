@@ -7,6 +7,7 @@ from markupsafe import escape
 from flask import Flask, session, request, redirect, url_for, Response
 from flask_login import LoginManager, login_required, logout_user, UserMixin, current_user, login_user
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 from pymongo import MongoClient
 from http import HTTPStatus
 from functools import wraps
@@ -15,6 +16,23 @@ class User(UserMixin):
     def __init__(self, user_id=None):
         self.id = user_id
         self.data = None
+
+# Custom JSON Encoder to handle ObjectId and datetime
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        if isinstance(o, datetime.datetime):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+# Custom JSON Provider to use the custom encoder
+class CustomJSONProvider(JSONProvider):
+    def dumps(self, obj, **kwargs):
+        return json.dumps(obj, **kwargs, cls=JSONEncoder)
+
+    def loads(self, s: str | bytes, **kwargs):
+        return json.loads(s, **kwargs)
 
 def manage_sensitive(name: str):
     v1 = config(name.upper())
@@ -43,6 +61,8 @@ app.secret_key = config("SECRET_KEY")
 login_manager = LoginManager()
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
+CORS(app)
+app.json = CustomJSONProvider()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -84,7 +104,7 @@ def get_user():
         print(f"Error getting user: {e}")
         return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login", methods=['POST'])
 def login():
     try:
         data = json.loads(request.data.decode("utf-8"))
@@ -114,9 +134,18 @@ def create_user():
         user = users.find_one({"email": data["email"]})
         if user is not None:
             return '{"error": "User already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
+
         user_data = {
+            "fullname": escape(data["fullname"]),
+            "username": escape(data["username"]),
             "email": escape(data["email"]),
-            "password": bcrypt.generate_password_hash(data["password"]).decode('utf-8')
+            "password": bcrypt.generate_password_hash(data["password"]).decode('utf-8'),
+            "dob": escape(data["dob"]),
+            #to check with frontend
+            "maritalStatus": escape(data["marital_status"]),
+            "children": escape(data["children"]),
+            "elderly": escape(data["elderly"]),
+            "interests": escape(data["interests"]),
         }
         user_id = users.insert_one(user_data).inserted_id
         user = User(user_id)
