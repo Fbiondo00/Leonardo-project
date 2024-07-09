@@ -15,14 +15,14 @@ services:
 
   frontend:
     build:
-      context: leonardo
+      context: ./leonardo
       target: PROD
     volumes:
       - ./leonardo/:/src
 
   backend:
     build:
-      context: flask
+      context: ./flask
       target: PROD
     stop_signal: SIGINT
     environment:
@@ -59,7 +59,7 @@ services:
 
   certbot_init:
     image: certbot/certbot
-    restart: never
+    restart: no
     volumes:
       - ssl_certificates:/etc/letsencrypt
     ports:
