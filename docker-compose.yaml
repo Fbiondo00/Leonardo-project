@@ -12,22 +12,26 @@ services:
       start_period: 30s
     secrets:
       - mongo_pass
+    ports:
+      - 27017:27017
     volumes:
       - mongodb_data:/data/db
 
   frontend:
     build:
       context: ./leonardo
-      target: PROD
+      target: prod
     volumes:
       - ./leonardo/:/src
+    ports:
+      - 8000:8000
     depends_on:
       - mongodb
 
   backend:
     build:
       context: ./flask
-      target: PROD
+      target: prod
     stop_signal: SIGINT
     environment:
       - MONGO_USER=leonardo
@@ -36,6 +40,8 @@ services:
       - FLASK_PORT=1337
     volumes:
       - ./flask/src:/src
+    ports:
+      - 1337:1337
     depends_on:
       mongodb:
         condition: service_healthy
@@ -68,7 +74,7 @@ services:
     volumes:
       - ssl_certificates:/etc/letsencrypt
     ports:
-      - 80:80
+      - 81:80
     command: certonly --standalone -n -m admin@racherom.wtf -d leonardo.racherom.wtf --agree-tos
 
   certbot:
@@ -96,4 +102,4 @@ secrets:
   secret_key:
     file: secrets/secret_key
   mongo_pass:
-    file: secrets/mongodb_password
+    file: ./secrets/mongodb_password.txt

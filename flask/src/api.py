@@ -4,7 +4,7 @@ import json
 from bson import ObjectId
 from decouple import config
 from markupsafe import escape
-from flask import Flask, session, request, redirect, url_for, Response
+from flask import Flask, session, request, redirect, url_for, Response, json
 from flask_login import LoginManager, login_required, logout_user, UserMixin, current_user, login_user
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
@@ -16,23 +16,6 @@ class User(UserMixin):
     def __init__(self, user_id=None):
         self.id = user_id
         self.data = None
-
-# Custom JSON Encoder to handle ObjectId and datetime
-class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        if isinstance(o, datetime.datetime):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
-
-# Custom JSON Provider to use the custom encoder
-class CustomJSONProvider(JSONProvider):
-    def dumps(self, obj, **kwargs):
-        return json.dumps(obj, **kwargs, cls=JSONEncoder)
-
-    def loads(self, s: str | bytes, **kwargs):
-        return json.loads(s, **kwargs)
 
 def manage_sensitive(name: str):
     v1 = config(name.upper())

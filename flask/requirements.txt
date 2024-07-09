@@ -1,10 +1,9 @@
-bson==0.5.10
 python-decouple
+pymongo
 MarkupSafe==2.0.1
 Flask==1.1.4
 Flask-Login
 Flask-Bcrypt
-pymongo==3.11.4
 gunicorn
 requests
 Flask-Cors
