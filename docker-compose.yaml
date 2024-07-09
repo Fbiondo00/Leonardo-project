@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   mongodb:
     image: mongo:latest
@@ -35,7 +33,7 @@ services:
       - MONGO_USER=leonardo
       - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
       - DEBUG=false
-      - FLASK_PORT=1447
+      - FLASK_PORT=1337
     volumes:
       - ./flask/src:/src
     depends_on:
@@ -48,7 +46,7 @@ services:
     image: nginx
     environment:
       - DOMAIN=leonardo.racherom.wtf
-      - BACKEND_ADDR=backend:1447
+      - BACKEND_ADDR=backend:1337
     volumes:
       - www:/var/www/leonardo
       - ./nginx/nginx.conf:/tmp/nginx.conf
