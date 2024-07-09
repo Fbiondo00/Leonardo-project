@@ -16,6 +16,8 @@ ENV PATH="/usr/local/lib/python3.8/site-packages:/usr/local/bin:${PATH}"
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=1337
+ENV MONGO_USER=admin
+ENV MONGO_PASS=admin
 
 EXPOSE 1337
 
