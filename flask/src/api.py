@@ -29,6 +29,7 @@ try:
         password=manage_sensitive("mongo_pass")
     )
     users = mongoClient.neurldb.users
+    welfares = mongoClient.neurldb.welfares
 except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
 
@@ -49,7 +50,6 @@ google = oauth.register(
     redirect_uri="http://localhost:1337/authorize",
     client_kwargs={'scope': 'openid profile email'}
 )
-
 class User(UserMixin):
     def __init__(self, user_id, data):
         self.id = user_id
@@ -175,10 +175,34 @@ def signup2():
 
     return render_template('/signup2.html')
 
+
+#to fix admin and search
+@app.route('/admin')
+@login_required
+def admin():
+    #adds welfares to the database
+    return 'Welcome admin!', HTTPStatus.OK
+
+@app.route('/search', methods=['GET'])
+@login_required
+def search():
+    query = request.args.get('query')
+    if not query:
+        return '{"error": "Missing query"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
+
+    results = welfares.find({"$text": {"$search": query}})
+    return json.dumps(list(results))
+
+
+
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()
+    google_user = session.get('google_user')
+    if google_user:
+        session.clear()
+    else:
+        logout_user()
     return redirect("http://localhost:1337/login") # then change with url_for(...)
 
 @app.route('/get_user', methods=['GET'])
