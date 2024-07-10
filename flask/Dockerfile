@@ -18,7 +18,9 @@ ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=1337
 ENV MONGO_USER=admin
 ENV MONGO_PASS=admin
+ENV GOOGLE_CLIENT_ID=1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com
+ENV GOOGLE_CLIENT_SECRET=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
 
 EXPOSE 1337
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD [ "python3", "-m", "flask", "run", "--host=localhost", "--port=1337"]
