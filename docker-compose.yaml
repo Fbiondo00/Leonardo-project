@@ -1,5 +1,4 @@
 name: "leonardo"
-version: "3.8"
 services:
   mongodb:
     image: mongo:latest
@@ -21,12 +20,10 @@ services:
       target: PROD
     volumes:
       - ./leonardo/:/src
-      - leonardo:/build
+      - www_leonardo:/build
 
   backend:
-    build:
-      context: flask
-      target: PROD
+    build: flask
     stop_signal: SIGINT
     environment:
       - MONGO_USER=leonardo
@@ -34,7 +31,7 @@ services:
       - DEBUG=false
       - FLASK_PORT=1447
     volumes:
-      - flask/src:/src
+      - ./flask/src:/src
     depends_on:
       mongodb:
         condition: service_healthy
@@ -46,7 +43,7 @@ services:
       - DOMANIN=leonardo.racherom.wtf
       - BACKEND_ADDR=backend:1447
     volumes:
-      - www:/var/www/leonardo
+      - www_leonardo:/var/www/leonardo
       - ./nginx/nginx.conf:/tmp/nginx.conf
     command: /bin/bash -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     ports:
@@ -62,7 +59,7 @@ services:
 
   certbot_init:
     image: certbot/certbot
-    restart: never
+    restart: no
     volumes:
       - ssl_certificates:/etc/letsencrypt
     ports:
@@ -90,13 +87,13 @@ volumes:
 
   ssl_certificates:
 
+
 networks:
   leonardo:
+
 
 secrets:
   secret_key:
     file: secrets/secret_key
   mongo_pass:
     file: secrets/mongodb_password
-
-
