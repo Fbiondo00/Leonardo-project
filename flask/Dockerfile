@@ -1,26 +1,28 @@
-FROM python:3.8
+# syntax=docker/dockerfile:1.4
+FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
 
-WORKDIR /app
+WORKDIR /src
+COPY requirements.txt /src
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip3 install -r requirements.txt
 
-COPY requirements.txt ./
+COPY . .
 
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+CMD ["python3", "server.py"]
 
+FROM builder as dev-envs
 
-COPY src/api.py /app/app.py
+RUN <<EOF
+apk update
+apk add git
+EOF
 
-# Add /usr/local/lib/python3.8/site-packages and /usr/local/bin to PATH
-ENV PATH="/usr/local/lib/python3.8/site-packages:/usr/local/bin:${PATH}"
+RUN <<EOF
+addgroup -S docker
+adduser -S --shell /bin/bash --ingroup docker vscode
+EOF
 
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=1337
-ENV MONGO_USER=admin
-ENV MONGO_PASS=admin
-ENV GOOGLE_CLIENT_ID=1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com
-ENV GOOGLE_CLIENT_SECRET=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
+# install Docker tools (cli, buildx, compose)
+COPY --from=gloursdocker/docker / /
 
-EXPOSE 1337
-
-CMD [ "python3", "-m", "flask", "run", "--host=localhost", "--port=1337"]
+CMD ["python3", "server.py"]
