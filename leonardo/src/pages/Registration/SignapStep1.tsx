@@ -108,7 +108,7 @@ export function SignapStep1({ setAllInfo, setCk}: SignapStep1Props) {
 				      <div className="grid gap-2">
                 <Label htmlFor="username">Full Name</Label>
                 <Input
-                  id="fullname"
+                  id="username"
                   type="text"
                   placeholder="Full Name"
                   onChange={handleFullNameChange}

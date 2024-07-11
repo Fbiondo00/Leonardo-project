@@ -63,28 +63,29 @@ def load_user(user_id):
     return None
 
 @app.route('/')
-@login_required
 def index():
+    if current_user.is_authenticated:
+        return f'Welcome {current_user.data["full_name"]}!'
+    else:
+        return redirect("http://localhost:1337/login") # then change with url_for(...)
     return 'Welcome!'
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return '{"error": "Unauthorized"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
+    return redirect("http://localhost:1337/login") # then change with url_for(...)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        data = json.loads(request.data.decode("utf-8"))
-        if "password" not in data or "email" not in data:
-            return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
-        user = UserMixin()
-        user.data = users.find_one({"email": escape(data["email"])})
-        if not user.data or not bcrypt.check_password_hash(user.data.pop("password"), data["password"]):
-            return '{"error":"invalid user"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
-        user.id = str(user.data.pop("_id"))
-        login_user(user, True)
-        return '{"success":"true"}'
-    return render_template('login.html')
+    data = json.loads(request.data.decode("utf-8"))
+    if "password" not in data or "email" not in data:
+        return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
+    user = UserMixin()
+    user.data = users.find_one({"email": escape(data["email"])})
+    if not user.data or not bcrypt.check_password_hash(user.data.pop("password"), data["password"]):
+        return '{"error":"invalid user"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
+    user.id = str(user.data.pop("_id"))
+    login_user(user, True)
+    return '{"success":"true"}'
 
 @app.route('/login_google')
 def login_google():

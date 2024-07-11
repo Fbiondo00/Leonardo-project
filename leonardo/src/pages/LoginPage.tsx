@@ -27,8 +27,8 @@ export const LoginForm = () => {
       <WelfareToggleLeft />
       <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
         <TypewriterEffectSmooth words={words}/>
-        <Card className="mx-auto w-full md:max-w-lg pt-6 mt-[-20px]">
-          <CardContent >
+        <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+          <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -40,7 +40,7 @@ export const LoginForm = () => {
                 />
               </div>
               <div className="grid gap-1">
-                <div className="flex items-center gap-[19rem]">
+                <div className="flex items-center justify-between ">
                   <Label htmlFor="password">Password</Label>
                   <div className="mt-1 text-center text-xs">
                     <Link to="/signup" className="text-red-500 hover:underline">Forgot Password?</Link>{" "}
