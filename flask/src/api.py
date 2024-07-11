@@ -50,10 +50,23 @@ google = oauth.register(
     redirect_uri="http://localhost:1337/authorize",
     client_kwargs={'scope': 'openid profile email'}
 )
+
+# Utility functions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 class User(UserMixin):
     def __init__(self, user_id, data):
         self.id = user_id
         self.data = data
+
+def admin_required(fn):
+    def wrapper(*args, **kwargs):
+        if current_user.data["email"] == config("admin_email"):
+            return fn(*args, **kwargs)
+        return '{"error": "Unauthorized"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
+    wrapper.__name__ = fn.__name__
+    return wrapper
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -178,11 +191,55 @@ def signup2():
 
 
 #to fix admin and search
-@app.route('/admin')
-@login_required
+@app.route('/admin', methods=['GET'])
+@admin_required
 def admin():
-    #adds welfares to the database
-    return 'Welcome admin!', HTTPStatus.OK
+    welfares_list = list(welfares.find())
+    return json.dumps(welfares_list)
+
+
+@app.route('/add_welfare', methods=['POST'])
+@admin_required
+def add_welfares():
+    title = request.form['title']
+    welf_title = welfares.find_one({"title": title})
+    if welf_title:
+        return '{"error": "Welfare already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
+    description = request.form['description']
+    if 'image' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['image']
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    welf_filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    welf_file = welfares.find_one({"image_path": welf_filepath})
+    if welf_file:
+        return '{"error": "Image already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        # Save to MongoDB
+        welfares.insert_one({
+            'title': title,
+            'description': description,
+            'image_path': image_path
+        })
+        flash('Welfare added successfully!')
+        return redirect(url_for('admin'))
+
+@app.route('/delete_welfare/<welfare_id>', methods=['POST'])
+@admin_required
+def delete_welfare(welfare_id):
+    result = welfares.delete_one({"_id": ObjectId(welfare_id)})
+    if result.deleted_count == 1:
+        flash('Welfare deleted successfully!')
+    else:
+        flash('Error deleting welfare!')
+    return redirect(url_for('admin'))
 
 @app.route('/search', methods=['GET'])
 @login_required
@@ -193,7 +250,6 @@ def search():
 
     results = welfares.find({"$text": {"$search": query}})
     return json.dumps(list(results))
-
 
 
 @app.route('/logout')
@@ -212,4 +268,5 @@ def get_user():
     return json.dumps(current_user.data)
 
 if __name__ == '__main__':
+    users.find_one({"email": config("admin_email")})
     app.run(port=1337, debug=config("DEBUG", cast=bool), threaded=True)
