@@ -4,30 +4,21 @@ import { Label } from "@/components/ui/label";
 import { DatePickerDemo } from "@/components/ui/datepicker";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-import { DirectionAwareHover } from "@/components/ui/direction-aware-hover";
-import preventionRegister from '@/assets/preventionRegister.jpg';
-import leisureRegisterImage from '@/assets/leisureRegister.jpg';
-import redingRegister from '@/assets/redingRegister.jpg';
-import sportRegister from '@/assets/sportRegister.jpg';
-import { Switch } from "@/components/ui/switch";
-
+import { useForm } from 'react-hook-form';
 
 
 export function SignapStep2() {
 
 	return(
-    <div className="grid gap-4">
-		  <div className="grid gap-2">
-        <Label htmlFor="username">Date of birth</Label>
-        <DatePickerDemo/>
-      </div>
+    <div className="grid gap-3">
+		  <div className="flex flex-col">
+          <label className="text-sm font-medium">Data di nascita</label>
+          <input
+            type="date"
+            className="border border-gray-300 rounded p-2 mt-1"
+          />
+        </div>
+
       <div className="grid gap-2">
         <Label htmlFor="MaritalStatus">Marital status</Label>
         <Select>
@@ -44,7 +35,8 @@ export function SignapStep2() {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid gap-2">
+      <div className="grid gap-2 mt-2">
+        <label className="text-sm font-medium">Do you have: </label>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Checkbox id="terms" />
@@ -52,7 +44,7 @@ export function SignapStep2() {
               htmlFor="terms"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Have children
+              Children
             </label>
           </div>
           <div className="flex items-center space-x-2">
@@ -61,60 +53,49 @@ export function SignapStep2() {
               htmlFor="newsletter"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              elderly parents
+              Elderly parents
             </label>
           </div>
         </div>
       </div>
-      <div className="">
-        <Label htmlFor="Interests ">Interests</Label>
-        <Carousel>
-          <CarouselContent>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={leisureRegisterImage} children={
-                <>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="leisure" />
-                    <Label htmlFor="leisure">leisure</Label>
-                  </div>
-                </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={sportRegister} children={
-                <>
-                 <div className="flex items-center space-x-2">
-                   <Switch id="sports" />
-                   <Label htmlFor="sports">sports</Label>
-                 </div>
-                </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={redingRegister} children={
-                <>
-                <div className="flex items-center space-x-2">
-                  <Switch id="reading" />
-                  <Label htmlFor="reading">reading</Label>
-                </div>
-               </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-            <CarouselItem>
-              <DirectionAwareHover imageUrl={preventionRegister} children={
-                <>
-                <div className="flex items-center space-x-2">
-                  <Switch id="prevention" />
-                  <Label htmlFor="prevention">prevention</Label>
-                </div>
-               </>
-              }></DirectionAwareHover>
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+      <div className="grid gap-2 mt-2">
+        <label className="text-sm font-medium">Interests: </label>
+      </div>
+      <div className="flex items-center justify-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+            welfare pilastri
+            </label>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+            welfare pilastri
+            </label>
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+            welfare pilastri
+            </label>
+            <div className="flex items-center space-x-2">
+            <Checkbox id="newsletter" />
+            <label
+              htmlFor="newsletter"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+            welfare pilastri
+            </label>
       </div>
     </div>
+    </div>
+  </div>
 	);
 }
+
