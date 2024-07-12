@@ -27,7 +27,7 @@ export const LoginForm = () => {
       <WelfareToggleLeft />
       <div className="absolute inset-0 flex flex-col justify-center items-center w-full h-full">
         <TypewriterEffectSmooth words={words}/>
-        <Card className="mx-auto w-full w-[90%] md:max-w-xl p-6 ">
+        <Card className="mx-auto w-[90%] md:max-w-xl p-6 ">
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -61,7 +61,7 @@ export const LoginForm = () => {
             </div>
           </CardContent>
         </Card>
-          <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-xs text-gray-600">
+        <div className="fixed bottom-0 left-0 w-full py-2 gray-100 text-center text-xs text-gray-600">
           <a href="/regolamento" className="mx-2 text-black-600 hover:underline">Regolamento</a> |
           <a href="/condizioni" className="mx-2 text-black-600 hover:underline">Condizioni d'uso</a> |
           <a href="/privacy" className="mx-2 text-black-600 hover:underline">Privacy</a> |

@@ -1,4 +1,3 @@
-import React from 'react';
 import welfareImage from '@/assets/welfareison1.png';
 
 const WelfareToggleRight = () => {
