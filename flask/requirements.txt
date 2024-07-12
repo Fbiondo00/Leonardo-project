@@ -1,0 +1,9 @@
+setuptools>=68.2.2
+flask>=3.0.3
+pymongo>=4.7.3
+MarkupSafe>=2.1.5
+python-decouple>=3.8
+MarkupSafe>=2.1.5
+Flask-Pymongo>=2.3.0
+Flask-Login>=0.6.3
+Flask-Bcrypt>=1.0.1

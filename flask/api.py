@@ -1,5 +1,6 @@
 import http.client
 import json
+import os
 
 from bson import ObjectId
 from decouple import config
@@ -11,23 +12,18 @@ from pymongo import MongoClient
 from http import HTTPStatus
 
 def manage_sensitive(name: str):
-    v1 = config(name.upper())
+    file_name = None
+    if name.upper()+'_FILE' in os.environ:
+        file_name = os.environ[name.upper()+'_FILE']
+    if file_name is not None and os.path.exists(file_name):
+        return open(file_name).read().rstrip('\n')
+    return config(name.upper())
 
-    secret_fpath = f'/run/secrets/{name}'
-    existence = os.path.exists(secret_fpath)
-
-    if v1 is not None:
-        return v1
-    if existence:
-        v2 = open(secret_fpath).read().rstrip('\n')
-        return v2
-    return KeyError(f'{name}')
-
-mongoClient = MongoClient(config("MONGO_HOST", default="localhost"), config("MONGO_PORT", cast=int, default=27017), username=manage_sensitive("mongo_user"), password=manage_sensitive("mongo_pass"))
+mongoClient = MongoClient(config("MONGO_HOST", default="localhost"), config("MONGO_PORT", cast=int, default=27017), username=manage_sensitive("MONGO_USER"), password=manage_sensitive("MONGO_PASSWORD"))
 users = mongoClient.neurldb.users
 
 app = Flask(__name__)
-app.secret_key = config("SECRET_KEY")
+app.secret_key = manage_sensitive("SECRET_KEY")
 login_manager = LoginManager()
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)

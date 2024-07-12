@@ -1,0 +1,77 @@
+name: "leonardo_dev"
+
+services:
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=leonardo
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_pass
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    secrets:
+      - mongo_pass
+
+  frontend:
+    image: node:latest
+    working_dir: /app
+    command: npm run dev
+    volumes:
+      - ./leonardo/:/app
+      - www_leonardo:/build
+
+  backend:
+    build:
+      context: flask
+    stop_signal: SIGINT
+    environment:
+      - MONGO_USER=leonardo
+      - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
+      - SECRET_KEY_FILE=/run/secrets/secret_key
+      - DEBUG=true
+      - FLASK_PORT=1447
+    volumes:
+      - ./flask:/app
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    secrets:
+      - mongo_pass
+      - secret_key
+  web:
+    image: nginx
+    environment:
+      - DOMANIN=leonardo.racherom.wtf
+      - BACKEND_ADDR=backend:1447
+    volumes:
+      - www_leonardo:/var/www/leonardo
+      - ./nginx/dev.conf:/etc/nginx/conf.d/default.conf
+    command: "nginx -g 'daemon off;'"
+    ports:
+      - 80:8080
+    depends_on:
+      frontend:
+        condition: service_started
+      backend:
+        condition: service_started
+
+volumes:
+  www_leonardo:
+
+  mongodb_data:
+
+  ssl_certificates:
+
+
+networks:
+  leonardo:
+
+
+secrets:
+  secret_key:
+    file: secrets/secret_key
+  mongo_pass:
+    file: secrets/mongodb_password
