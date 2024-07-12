@@ -1,4 +1,5 @@
-name: "leonardo"
+name: "leonardo_dev"
+
 services:
   mongodb:
     image: mongo:latest
@@ -15,11 +16,11 @@ services:
       - mongo_pass
 
   frontend:
-    build:
-      context: leonardo
-      target: PROD
+    image: node:latest
+    working_dir: /app
+    command: npm run dev
     volumes:
-      - ./leonardo/:/src
+      - ./leonardo/:/app
       - www_leonardo:/build
 
   backend:
@@ -29,15 +30,17 @@ services:
     environment:
       - MONGO_USER=leonardo
       - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
-      - DEBUG=false
+      - SECRET_KEY_FILE=/run/secrets/secret_key
+      - DEBUG=true
       - FLASK_PORT=1447
     volumes:
-      - ./flask/src:/src
+      - ./flask:/app
     depends_on:
       mongodb:
         condition: service_healthy
     secrets:
       - mongo_pass
+      - secret_key
   web:
     image: nginx
     environment:
@@ -45,44 +48,18 @@ services:
       - BACKEND_ADDR=backend:1447
     volumes:
       - www_leonardo:/var/www/leonardo
-      - ./nginx/app.conf:/tmp/nginx.conf
-    command: /bin/bash -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+      - ./nginx/dev.conf:/etc/nginx/conf.d/default.conf
+    command: "nginx -g 'daemon off;'"
     ports:
       - 80:8080
-      - 443:8443
     depends_on:
-      certbot_init:
-        condition: service_completed_successfully
       frontend:
-        condition: service_completed_successfully
+        condition: service_started
       backend:
         condition: service_started
 
-  certbot_init:
-    image: certbot/certbot
-    restart: no
-    volumes:
-      - ssl_certificates:/etc/letsencrypt
-    ports:
-      - 80:80
-    command: certonly --agree-tos --standalone -n -m admin@racherom.wtf -d leonardo.racherom.wtf
-
-  certbot:
-    image: certbot/certbot
-    restart: unless-stopped
-    volumes:
-      - ssl_certificates:/etc/letsencrypt
-      - www_challange:/var/www/certbot
-    depends_on:
-      - web
-    environment:
-      - DOMANIN=leonardo.racherom.wtf
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
 volumes:
   www_leonardo:
-
-  www_challange:
 
   mongodb_data:
 

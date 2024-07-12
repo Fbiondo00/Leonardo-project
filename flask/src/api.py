@@ -2,8 +2,9 @@ import http.client
 import json
 import os
 from bson import ObjectId
+from markupsafe import escape
 from decouple import config
-from flask import Flask, session, request, redirect, url_for, render_template, escape
+from flask import Flask, session, request, redirect, url_for, render_template
 from flask_login import LoginManager, login_required, logout_user, UserMixin, current_user, login_user
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
@@ -11,22 +12,19 @@ from http import HTTPStatus
 from authlib.integrations.flask_client import OAuth
 
 def manage_sensitive(name: str):
-    v1 = config(name.upper())
-    secret_fpath = f'/run/secrets/{name}'
-    existence = os.path.exists(secret_fpath)
-    if v1 is not None:
-        return v1
-    if existence:
-        v2 = open(secret_fpath).read().rstrip('\n')
-        return v2
-    raise KeyError(f'{name}')
+    file_name = None
+    if name.upper()+'_FILE' in os.environ:
+        file_name = os.environ[name.upper()+'_FILE']
+    if file_name is not None and os.path.exists(file_name):
+        return open(file_name).read().rstrip('\n')
+    return config(name.upper())
 
 try:
     mongoClient = MongoClient(
         config("MONGO_HOST", default="localhost"),
         config("MONGO_PORT", cast=int, default=27017),
-        username=manage_sensitive("mongo_user"),
-        password=manage_sensitive("mongo_pass")
+        username=manage_sensitive("MONGO_USER"),
+        password=manage_sensitive("MONGO_PASSWORD")
     )
     users = mongoClient.neurldb.users
     welfares = mongoClient.neurldb.welfares
@@ -34,7 +32,7 @@ except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = manage_sensitive("SECRET_KEY")
 login_manager = LoginManager()
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
@@ -213,10 +211,6 @@ def add_welfares():
     if file.filename == '':
         flash('No selected file')
         return redirect(request.url)
-    welf_filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    welf_file = welfares.find_one({"image_path": welf_filepath})
-    if welf_file:
-        return '{"error": "Image already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
