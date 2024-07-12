@@ -19,12 +19,11 @@ module.exports = {
 
 	  extend: {
 		boxShadow: {
-									// 255, 255, 255, 1
 		  'custom': '0 4px 6px rgba(255, 255, 255, 1), 0 1px 3px rgba(0, 0, 0, 0.08)',
-		  'red-glow': '0 0 15px rgba(255, 0, 0, 0.5)',
 		},
 		backgroundImage: {
 		  "loginForm": "url('./src/assets/login.png')",
+		  "leonardoWhite": "url('./src/assets/login1.png')",
 
 		},
 		welfareison:{
@@ -32,6 +31,9 @@ module.exports = {
 		},
 		colors: {
 		  leonardoRed: '#ebebeb',
+		  leonardoRed2: '#EC0928',
+		  leonardoGrey : '#3A414D',
+		  leonardoBlue : '#38586C',
 		  border: "hsl(var(--border))",
 		  input: "hsl(var(--input))",
 		  ring: "hsl(var(--ring))",

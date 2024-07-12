@@ -11,6 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WalfarepsImport } from './routes/walfareps'
+import { Route as WalfarefiImport } from './routes/walfarefi'
+import { Route as WalfarefaImport } from './routes/walfarefa'
+import { Route as WalfareecImport } from './routes/walfareec'
 import { Route as SignupImport } from './routes/signup'
 import { Route as SearchImport } from './routes/search'
 import { Route as ProfileImport } from './routes/profile'
@@ -18,6 +22,26 @@ import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const WalfarepsRoute = WalfarepsImport.update({
+  path: '/walfareps',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WalfarefiRoute = WalfarefiImport.update({
+  path: '/walfarefi',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WalfarefaRoute = WalfarefaImport.update({
+  path: '/walfarefa',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WalfareecRoute = WalfareecImport.update({
+  path: '/walfareec',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SignupRoute = SignupImport.update({
   path: '/signup',
@@ -83,6 +107,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
+    '/walfareec': {
+      id: '/walfareec'
+      path: '/walfareec'
+      fullPath: '/walfareec'
+      preLoaderRoute: typeof WalfareecImport
+      parentRoute: typeof rootRoute
+    }
+    '/walfarefa': {
+      id: '/walfarefa'
+      path: '/walfarefa'
+      fullPath: '/walfarefa'
+      preLoaderRoute: typeof WalfarefaImport
+      parentRoute: typeof rootRoute
+    }
+    '/walfarefi': {
+      id: '/walfarefi'
+      path: '/walfarefi'
+      fullPath: '/walfarefi'
+      preLoaderRoute: typeof WalfarefiImport
+      parentRoute: typeof rootRoute
+    }
+    '/walfareps': {
+      id: '/walfareps'
+      path: '/walfareps'
+      fullPath: '/walfareps'
+      preLoaderRoute: typeof WalfarepsImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -94,6 +146,10 @@ export const routeTree = rootRoute.addChildren({
   ProfileRoute,
   SearchRoute,
   SignupRoute,
+  WalfareecRoute,
+  WalfarefaRoute,
+  WalfarefiRoute,
+  WalfarepsRoute,
 })
 
 /* prettier-ignore-end */
@@ -108,7 +164,11 @@ export const routeTree = rootRoute.addChildren({
         "/login",
         "/profile",
         "/search",
-        "/signup"
+        "/signup",
+        "/walfareec",
+        "/walfarefa",
+        "/walfarefi",
+        "/walfareps"
       ]
     },
     "/": {
@@ -125,6 +185,18 @@ export const routeTree = rootRoute.addChildren({
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/walfareec": {
+      "filePath": "walfareec.tsx"
+    },
+    "/walfarefa": {
+      "filePath": "walfarefa.tsx"
+    },
+    "/walfarefi": {
+      "filePath": "walfarefi.tsx"
+    },
+    "/walfareps": {
+      "filePath": "walfareps.tsx"
     }
   }
 }

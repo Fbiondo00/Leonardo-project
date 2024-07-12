@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -104,8 +104,13 @@ export function SignapStep1({ setAllInfo, setCk}: SignapStep1Props) {
 
 
 	return(
+<<<<<<< HEAD
             <div className="grid gap-4 ">
 				      <div className="grid gap-2 ">
+=======
+            <div className="grid gap-3">
+				      <div className="grid gap-2">
+>>>>>>> afalconi
                 <Label htmlFor="username">Full Name</Label>
                 <Input
                   id="username"
