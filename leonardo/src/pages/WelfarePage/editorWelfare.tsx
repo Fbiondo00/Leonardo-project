@@ -10,7 +10,7 @@ interface Card {
   over: string;
 }
 
-export const WelfareGenericPage: React.FC = () => {
+export const EditCardPage: React.FC = () => {
   const location = useLocation();
 
   let pageBg: string = '';
@@ -197,3 +197,5 @@ export const WelfareGenericPage: React.FC = () => {
     </div>
   );
 };
+
+export default EditCardPage;

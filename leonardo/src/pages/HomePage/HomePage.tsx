@@ -3,6 +3,7 @@ import { ThreeDCardDemo } from './card/cardhome';
 import LNavBar from '../LeonardoNavBar';
 import CarosleHomePage from './CaroselHomePage';
 import { Link } from '@tanstack/react-router';
+import { CardOver } from '@/components/ui/CardOver';
 
 export const HomePage: React.FC = () => {
 	return (
@@ -44,8 +45,10 @@ export const HomePage: React.FC = () => {
 							background={'bg-gradient-to-r from-orange-600 to-red-700'}
 						/>
 				</Link>
+
+      </div>
 			</div>
 		</div>
-	</div>
+
 	);
 };

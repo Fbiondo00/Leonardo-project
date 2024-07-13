@@ -71,6 +71,7 @@ const CarouselHomePage: React.FC<CarouselHomePageProps> = () => {
                       description={card.description}
                       background={card.background}
                       over={card.over}
+                      
                     />
                   </CardContent>
                 </Card>
