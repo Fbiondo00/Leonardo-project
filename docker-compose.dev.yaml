@@ -29,7 +29,7 @@ services:
     stop_signal: SIGINT
     environment:
       - MONGO_USER=leonardo
-      - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
+      - MONGO_PASSWORD=/run/secrets/mongo_pass
       - SECRET_KEY_FILE=/run/secrets/secret_key
       - DEBUG=true
       - FLASK_PORT=1447
