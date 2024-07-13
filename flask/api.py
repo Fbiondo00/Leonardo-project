@@ -262,5 +262,4 @@ def get_user():
     return json.dumps(current_user.data)
 
 if __name__ == '__main__':
-    users.find_one({"email": config("admin_email")})
     app.run(port=1337, debug=config("DEBUG", cast=bool), threaded=True)
