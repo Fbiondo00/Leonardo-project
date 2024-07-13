@@ -9,6 +9,7 @@ import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect"
 import { Link } from "@tanstack/react-router"
 import WelfareToggleRight from "@/components/ui/welfaretoggleright"
 import WelfareToggleLeft from "@/components/ui/welfatoggleleft"
+import GoogleAuthButton from "@/components/ui/google"
 
 
 export const LoginForm = () => {
@@ -55,6 +56,9 @@ export const LoginForm = () => {
               <Button type="submit" className="w-full bg-leonardoGrey text-white py-2 px-4 rounded-full shadow-custom">
                 Login
               </Button>
+              <div className="flex justify-center">
+              <GoogleAuthButton/>
+              </div>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account? <Link to="/signup" className="text-blue-600 hover:underline">Register</Link>{" "}
