@@ -5,7 +5,7 @@ services:
     image: mongo:latest
     environment:
       - MONGO_INITDB_ROOT_USERNAME=leonardo
-      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_pass
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=/secrets/mongodb_password
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 1m30s
@@ -14,6 +14,8 @@ services:
       start_period: 30s
     secrets:
       - mongo_pass
+    ports:
+      - 27017:27017
 
   frontend:
     image: node:latest
@@ -29,8 +31,8 @@ services:
     stop_signal: SIGINT
     environment:
       - MONGO_USER=leonardo
-      - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
-      - SECRET_KEY_FILE=/run/secrets/secret_key
+      - MONGO_PASSWORD_FILE=/secrets/mongodb_password
+      - SECRET_KEY_FILE=/secrets/secret_key
       - DEBUG=true
       - FLASK_PORT=1447
     volumes:
@@ -38,6 +40,8 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+    ports:
+      - 1337:1337
     secrets:
       - mongo_pass
       - secret_key

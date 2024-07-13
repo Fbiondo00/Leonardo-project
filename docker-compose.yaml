@@ -4,7 +4,7 @@ services:
     image: mongo:latest
     environment:
       - MONGO_INITDB_ROOT_USERNAME=leonardo
-      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_pass
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=secrets/mongodb_password
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 1m30s
@@ -23,12 +23,14 @@ services:
       - www_leonardo:/build
 
   backend:
+    ports:
+      - 1337:1337
     build:
       context: flask
     stop_signal: SIGINT
     environment:
       - MONGO_USER=leonardo
-      - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
+      - MONGO_PASSWORD_FILE=secrets/mongodb_password
       - DEBUG=false
       - FLASK_PORT=1447
     volumes:
