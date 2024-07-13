@@ -1,3 +1,5 @@
+name: "leonardo_dev"
+
 services:
   mongodb:
     image: mongo:latest
@@ -12,9 +14,18 @@ services:
       start_period: 30s
     secrets:
       - mongo_pass
-    ports:
-      - 27017:27017
 
+  frontend:
+    image: node:latest
+    working_dir: /app
+    command: /bin/bash -c "npm install; npm run dev"
+    volumes:
+      - ./leonardo/:/app
+      - www_leonardo:/build
+    expose:
+      - 5173
+    ports:
+      - 5173:5173
 
   backend:
     build:
@@ -22,21 +33,22 @@ services:
     stop_signal: SIGINT
     environment:
       - MONGO_USER=leonardo
-      - MONGO_PASSWORD=/run/secrets/mongo_pass
+      - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
       - SECRET_KEY_FILE=/run/secrets/secret_key
-      - DEBUG=true
+      - DEBUG=false
       - FLASK_PORT=1447
     volumes:
       - ./flask:/app
+    expose:
+      - 1337
+    ports:
+      - 1337:1337
     depends_on:
       mongodb:
         condition: service_healthy
-    ports:
-      - 1337:1337
     secrets:
       - mongo_pass
       - secret_key
-
   web:
     image: nginx
     environment:
@@ -49,6 +61,8 @@ services:
     ports:
       - 80:8080
     depends_on:
+      frontend:
+        condition: service_started
       backend:
         condition: service_started
 

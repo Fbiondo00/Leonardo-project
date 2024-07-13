@@ -1,0 +1,13 @@
+FROM node:latest AS BUILDER
+
+WORKDIR /app
+
+
+
+
+FROM BUILDER AS DEV
+
+
+
+
+FROM BUILDER AS PROD

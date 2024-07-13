@@ -26,6 +26,7 @@ try:
         username=manage_sensitive("MONGO_USER"),
         password=manage_sensitive("MONGO_PASSWORD")
     )
+
     users = mongoClient.neurldb.users
     welfares = mongoClient.neurldb.welfares
 except Exception as e:
@@ -41,8 +42,8 @@ bcrypt = Bcrypt(app)
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
-    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+    client_id=manage_sensitive("GOOGLE_CLIENT_ID"),
+    client_secret=manage_sensitive("GOOGLE_CLIENT_SECRET"),
     authorize_url='https://accounts.google.com/o/oauth2/auth',
     access_token_url='https://accounts.google.com/o/oauth2/token',
     redirect_uri="http://localhost:1337/authorize",
