@@ -80,7 +80,6 @@ def index():
         return f'Welcome {current_user.data["full_name"]}!'
     else:
         return redirect("http://localhost:1337/login") # then change with url_for(...)
-    return 'Welcome!'
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -99,12 +98,12 @@ def login():
     login_user(user, True)
     return '{"success":"true"}'
 
-@app.route('/login_google')
+@app.route('/login/google')
 def login_google():
     redirect_uri = "http://localhost:1337/authorize"
     return google.authorize_redirect(redirect_uri)
 
-@app.route('/authorize')
+@app.route('/login/authorize')
 def authorize():
     token = google.authorize_access_token()
     user_info = google.parse_id_token(token)

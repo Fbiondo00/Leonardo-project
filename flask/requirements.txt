@@ -9,5 +9,5 @@ Flask-Bcrypt
 gunicorn
 requests
 Flask-Cors
-werkzeug>=3.0.0
 authlib
+werkzeug>=3.0.0
