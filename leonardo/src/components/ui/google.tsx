@@ -13,13 +13,13 @@ const GoogleAuthButton = () => {
 	};
 
 	return (
-	  <GoogleOAuthProvider clientId="Il-tuo-client-ID-di-Google">
+	  <GoogleOAuthProvider clientId="196290854318-jgukejpvhiagci7j2obkfipsmfd1gtda.apps.googleusercontent.com">
 		<div className="">
 		  <GoogleLogin
 			onSuccess={onSuccess}
 		 onError={onFailure}
 			className="bg-blue-500 text-white p-1  rounded"
-			
+
 		  />
 		</div>
 	  </GoogleOAuthProvider>

@@ -1,264 +1,177 @@
-import http.client
 import json
 import os
+import logging
 from bson import ObjectId
-from markupsafe import escape
 from decouple import config
-from flask import Flask, session, request, redirect, url_for, render_template
-from flask_login import LoginManager, login_required, logout_user, UserMixin, current_user, login_user
+from markupsafe import escape
+from flask import Flask, request
+from flask_login import LoginManager, login_required, logout_user, UserMixin, login_user
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from http import HTTPStatus
-from authlib.integrations.flask_client import OAuth
 
+# Configurazione del logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Funzione per gestire le variabili sensibili
 def manage_sensitive(name: str):
-    file_name = None
-    if name.upper()+'_FILE' in os.environ:
-        file_name = os.environ[name.upper()+'_FILE']
-    if file_name is not None and os.path.exists(file_name):
+    file_name = os.environ.get(name.upper() + '_FILE')
+    if file_name and os.path.exists(file_name):
         return open(file_name).read().rstrip('\n')
     return config(name.upper())
 
+# Recupero delle credenziali MongoDB
+mongo_user = manage_sensitive("MONGO_USER")
+mongo_password = manage_sensitive("MONGO_PASSWORD")
+mongo_host = config("MONGO_HOST", default="localhost")
+mongo_port = config("MONGO_PORT", cast=int, default=27017)
+
+# Logging delle credenziali MongoDB
+logging.debug(f"MONGO_USER: {mongo_user}")
+logging.debug(f"MONGO_HOST: {mongo_host}")
+logging.debug(f"MONGO_PORT: {mongo_port}")
+
+# Connessione a MongoDB
 try:
     mongoClient = MongoClient(
-        config("MONGO_HOST", default="localhost"),
-        config("MONGO_PORT", cast=int, default=27017),
-        username=manage_sensitive("MONGO_USER"),
-        password=manage_sensitive("MONGO_PASSWORD_FILE"),
+        host=mongo_host,
+        port=mongo_port,
+        username=mongo_user,
+        password=mongo_password,
+        authSource='admin'  # Specifica il database di autenticazione, se necessario
     )
-
-    users = mongoClient.neurldb.users
-    welfares = mongoClient.neurldb.welfares
+    db = mongoClient.neurldb  # Sostituisci con il nome del tuo database
+    users_collection = db.users
+    logging.debug("Connected to MongoDB successfully.")
 except Exception as e:
-    print(f"Error connecting to MongoDB: {e}")
+    logging.error(f"Error connecting to MongoDB: {e}")
+    raise
 
+# Configurazione dell'app Flask
 app = Flask(__name__)
-app.secret_key = manage_sensitive("SECRET_KEY_FILE")
+app.secret_key = manage_sensitive("SECRET_KEY")
 login_manager = LoginManager()
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 
-# Configure OAuth
-oauth = OAuth(app)
-google = oauth.register(
-    name='google',
-    client_id=manage_sensitive("GOOGLE_CLIENT_ID_FILE"),
-    client_secret=manage_sensitive("GOOGLE_CLIENT_SECRET_FILE"),
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    redirect_uri="http://localhost:1337/authorize",
-    client_kwargs={'scope': 'openid profile email'},
-    response_type='code'
-)
-
-# Utility functions
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+# Modello dell'utente per Flask-Login
 class User(UserMixin):
-    def __init__(self, user_id, data):
-        self.id = user_id
-        self.data = data
+    pass
 
-def admin_required(fn):
-    def wrapper(*args, **kwargs):
-        if current_user.data["email"] == config("admin_email"):
-            return fn(*args, **kwargs)
-        return '{"error": "Unauthorized"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
-    wrapper.__name__ = fn.__name__
-    return wrapper
-
+# Caricamento dell'utente dal login manager
 @login_manager.user_loader
 def load_user(user_id):
-    user_data = users.find_one({"_id": ObjectId(user_id)})
-    if user_data:
-        return User(str(user_data["_id"]), user_data)
+    try:
+        user_data = users_collection.find_one({"_id": ObjectId(user_id)})
+        if user_data:
+            user = User()
+            user.id = str(user_data["_id"])
+            user.email = user_data["email"]
+            return user
+    except Exception as e:
+        logging.error(f"Error loading user: {e}")
     return None
 
-@app.route('/')
-def index():
-    return "Hello, World!"
-
+# Gestione dell'autorizzazione non riuscita
 @login_manager.unauthorized_handler
 def unauthorized():
-    return redirect("http://localhost:1337/login") # then change with url_for(...)
+    return '{"error": "Unauthorized"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
 
-@app.route('/login', methods=['POST'])
+# Rotte dell'applicazione
+
+@app.route('/')
+def hello_world():
+    return "Hello World"
+
+@app.route("/login", methods=['POST'])
 def login():
-    data = json.loads(request.data.decode("utf-8"))
-    if "password" not in data or "email" not in data:
-        return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
-    user = UserMixin()
-    user.data = users.find_one({"email": escape(data["email"])})
-    if not user.data or not bcrypt.check_password_hash(user.data.pop("password"), data["password"]):
-        return '{"error":"invalid user"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
-    user.id = str(user.data.pop("_id"))
-    login_user(user, True)
-    return '{"success":"true"}'
-
-@app.route('/login/google')
-def login_google():
-    redirect_uri = "http://localhost:1337/authorize"
-    return google.authorize_redirect(redirect_uri)
-
-@app.route('/login/authorize')
-def authorize():
-    token = google.authorize_access_token()
-    user_info = google.parse_id_token(token)
-    user_email = user_info['email']
-
-    user_data = users.find_one({"email": user_email})
-    if user_data:
-        user = User(str(user_data["_id"]), user_data)
-        login_user(user)
-        return redirect("http://localhost:1337/")
-    else:
-        session['google_user'] = user_info
-        return redirect("http://localhost:1337/signup2")
-
-@app.route('/signup', methods=['POST'])
-def signup():
-    data = json.loads(request.data.decode("utf-8"))
-
-    required_fields = ["email", "password"]
-    for field in required_fields:
-        if field not in data:
-            return f'{{"error": "Missing {field}"}}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
-
-    user = users.find_one({"email": data["email"]})
-    if user is not None:
-        return '{"error": "User already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
-
-    user_data = {
-        "email": escape(data["email"]),
-        "password": bcrypt.generate_password_hash(data["password"])
-    }
-
-    user = UserMixin()
-    user.id = users.insert_one(user_data).inserted_id
-    user.data = user_data
-    login_user(user, True)
-
-    return redirect("http://localhost:1337/signup2") # then change with url_for(...)
-
-@app.route('/signup2', methods=['GET', 'POST'])
-def signup2():
-    if request.method == 'POST':
+    try:
         data = json.loads(request.data.decode("utf-8"))
+        email = escape(data.get("email"))
+        password = data.get("password")
+        if not email or not password:
+            return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
 
-        required_fields = ["full_name", "username", "date_of_birth", "marital_status"]
-        for field in required_fields:
-            if field not in data:
-                return f'{{"error": "Missing {field}"}}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
+        user_data = users_collection.find_one({"email": email})
+        if not user_data or not bcrypt.check_password_hash(user_data["password"], password):
+            return '{"error":"invalid credentials"}', HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
 
-        google_user = session.get('google_user')
-        if google_user:
-            user_data = {
-                "full_name": escape(data["full_name"]),
-                "username": escape(data["username"]),
-                "date_of_birth": escape(data["date_of_birth"]),
-                "marital_status": escape(data["marital_status"]),
-                "has_children": data.get("has_children", False),
-                "has_elderly_parents": data.get("has_elderly_parents", False),
-                "interests": data.get("interests", [])
-            }
-            user_email = google_user['email']
-            user = users.find_one({"email": user_email})
-            users.update_one({"_id": user["_id"]}, {"$set": user_data})
-            user_data.update(google_user)
-            user = User(str(user["_id"]), user_data)
-            login_user(user)
-            session.pop('google_user', None)
-        else:
-            current_user.data.update({
-                "full_name": escape(data["full_name"]),
-                "username": escape(data["username"]),
-                "date_of_birth": escape(data["date_of_birth"]),
-                "marital_status": escape(data["marital_status"]),
-                "has_children": data.get("has_children", False),
-                "has_elderly_parents": data.get("has_elderly_parents", False),
-                "interests": data.get("interests", [])
-            })
-            users.update_one({"_id": ObjectId(current_user.id)}, {"$set": current_user.data})
+        user = User()
+        user.id = str(user_data["_id"])
+        login_user(user, remember=True)
+        return '{"success":"true"}'
 
-        return redirect("http://localhost:1337/") # then change with url_for(...)
+    except Exception as e:
+        logging.error(f"Error during login: {e}")
+        return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
-    return render_template('/signup2.html')
-
-
-#to fix admin and search
-@app.route('/admin', methods=['GET'])
-@admin_required
-def admin():
-    welfares_list = list(welfares.find())
-    return json.dumps(welfares_list)
-
-
-@app.route('/add_welfare', methods=['POST'])
-@admin_required
-def add_welfares():
-    title = request.form['title']
-    welf_title = welfares.find_one({"title": title})
-    if welf_title:
-        return '{"error": "Welfare already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
-    description = request.form['description']
-    if 'image' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
-    file = request.files['image']
-    if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-        # Save to MongoDB
-        welfares.insert_one({
-            'title': title,
-            'description': description,
-            'image_path': image_path
-        })
-        flash('Welfare added successfully!')
-        return redirect(url_for('admin'))
-
-@app.route('/delete_welfare/<welfare_id>', methods=['POST'])
-@admin_required
-def delete_welfare(welfare_id):
-    result = welfares.delete_one({"_id": ObjectId(welfare_id)})
-    if result.deleted_count == 1:
-        flash('Welfare deleted successfully!')
-    else:
-        flash('Error deleting welfare!')
-    return redirect(url_for('admin'))
-
-@app.route('/search', methods=['GET'])
-@login_required
-def search():
-    query = request.args.get('query')
-    if not query:
-        return '{"error": "Missing query"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
-
-    results = welfares.find({"$text": {"$search": query}})
-    return json.dumps(list(results))
-
-
-@app.route('/logout')
+@app.route("/logout")
 @login_required
 def logout():
-    google_user = session.get('google_user')
-    if google_user:
-        session.clear()
+    try:
         logout_user()
-    else:
-        logout_user()
-    return redirect("http://localhost:1337/login") # then change with url_for(...)
+        return '{"success":"true"}'
+    except Exception as e:
+        logging.error(f"Error during logout: {e}")
+        return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
-@app.route('/get_user', methods=['GET'])
-@login_required
-def get_user():
-    return json.dumps(current_user.data)
+@app.route("/create_user", methods=['POST'])
+def create_user():
+    try:
+        data = json.loads(request.data.decode("utf-8"))
+        email = escape(data.get("email"))
+        password = data.get("password")
+        if not email or not password:
+            return '{"error":"invalid data"}', HTTPStatus.BAD_REQUEST, {'Content-Type': 'application/json'}
+
+        existing_user = users_collection.find_one({"email": email})
+        if existing_user:
+            return '{"error": "User already exists"}', HTTPStatus.CONFLICT, {'Content-Type': 'application/json'}
+
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        user_data = {
+            "email": email,
+            "password": hashed_password
+        }
+
+        if "children" in data:
+            user_data["children"] = []
+            for child_data in data["children"]:
+                child = {}
+                for key, value in child_data.items():
+                    if isinstance(value, str):
+                        child[key] = escape(value)
+                user_data["children"].append(child)
+
+        result = users_collection.insert_one(user_data)
+        user_id = str(result.inserted_id)
+
+        user = User()
+        user.id = user_id
+        login_user(user, remember=True)
+
+        return '{"success": "true"}', HTTPStatus.OK, {'Content-Type': 'application/json'}
+
+    except Exception as e:
+        logging.error(f"Error creating user: {e}")
+        return '{"error":"internal server error"}', HTTPStatus.INTERNAL_SERVER_ERROR, {'Content-Type': 'application/json'}
 
 if __name__ == '__main__':
-    app.run(port=1337, debug=config("DEBUG", cast=bool), threaded=True)
+    debug_mode = config("DEBUG", cast=bool, default=False)
+    logging.debug(f"Running in debug mode: {debug_mode}")
+
+    # Creazione dell'utente predefinito
+    default_email = "ciao@gmail.com"
+    default_password = "ciao123"
+    if not users_collection.find_one({"email": default_email}):
+        hashed_password = bcrypt.generate_password_hash(default_password).decode('utf-8')
+        default_user = {
+            "email": default_email,
+            "password": hashed_password
+        }
+        users_collection.insert_one(default_user)
+        logging.debug(f"Default user created: {default_email}")
+    else:
+        logging.debug(f"Default user '{default_email}' already exists.")
+
+    app.run(host='0.0.0.0', port=1337, debug=debug_mode, threaded=True)
