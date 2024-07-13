@@ -36,7 +36,10 @@ services:
       - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
       - SECRET_KEY_FILE=/run/secrets/secret_key
       - DEBUG=false
-      - FLASK_PORT=1447
+      - FLASK_PORT=1337
+      - GOOGLE_CLIENT_ID_FILE=/run/secrets/google_oauth_client
+      - GOOGLE_CLIENT_SECRET_FILE=/run/secrets/google_oauth_secrets
+
     volumes:
       - ./flask:/app
     expose:
@@ -49,6 +52,8 @@ services:
     secrets:
       - mongo_pass
       - secret_key
+      - google_oauth_secrets
+      - google_oauth_client
   web:
     image: nginx
     environment:
@@ -83,3 +88,7 @@ secrets:
     file: secrets/secret_key
   mongo_pass:
     file: secrets/mongodb_password
+  google_oauth_secrets:
+    file: secrets/google_oauth_client_secret
+  google_oauth_client:
+    file: secrets/google_oauth_client_id

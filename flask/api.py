@@ -24,7 +24,7 @@ try:
         config("MONGO_HOST", default="localhost"),
         config("MONGO_PORT", cast=int, default=27017),
         username=manage_sensitive("MONGO_USER"),
-        password=manage_sensitive("MONGO_PASSWORD")
+        password=manage_sensitive("MONGO_PASSWORD_FILE"),
     )
 
     users = mongoClient.neurldb.users
@@ -33,7 +33,7 @@ except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
 
 app = Flask(__name__)
-app.secret_key = manage_sensitive("SECRET_KEY")
+app.secret_key = manage_sensitive("SECRET_KEY_FILE")
 login_manager = LoginManager()
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
@@ -42,12 +42,13 @@ bcrypt = Bcrypt(app)
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
-    client_id=manage_sensitive("GOOGLE_CLIENT_ID"),
-    client_secret=manage_sensitive("GOOGLE_CLIENT_SECRET"),
+    client_id=manage_sensitive("GOOGLE_CLIENT_ID_FILE"),
+    client_secret=manage_sensitive("GOOGLE_CLIENT_SECRET_FILE"),
     authorize_url='https://accounts.google.com/o/oauth2/auth',
     access_token_url='https://accounts.google.com/o/oauth2/token',
     redirect_uri="http://localhost:1337/authorize",
-    client_kwargs={'scope': 'openid profile email'}
+    client_kwargs={'scope': 'openid profile email'},
+    response_type='code'
 )
 
 # Utility functions
@@ -76,10 +77,7 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    if current_user.is_authenticated:
-        return f'Welcome {current_user.data["full_name"]}!'
-    else:
-        return redirect("http://localhost:1337/login") # then change with url_for(...)
+    return "Hello, World!"
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -252,6 +250,7 @@ def logout():
     google_user = session.get('google_user')
     if google_user:
         session.clear()
+        logout_user()
     else:
         logout_user()
     return redirect("http://localhost:1337/login") # then change with url_for(...)
