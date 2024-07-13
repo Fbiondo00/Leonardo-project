@@ -22,6 +22,10 @@ services:
     volumes:
       - ./leonardo/:/app
       - www_leonardo:/build
+    expose:
+      - 5173
+    ports:
+      - 5173:5173
 
   backend:
     build:
@@ -31,10 +35,14 @@ services:
       - MONGO_USER=leonardo
       - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
       - SECRET_KEY_FILE=/run/secrets/secret_key
-      - DEBUG=true
+      - DEBUG=false
       - FLASK_PORT=1447
     volumes:
       - ./flask:/app
+    expose:
+      - 1337
+    ports:
+      - 1337:1337
     depends_on:
       mongodb:
         condition: service_healthy
