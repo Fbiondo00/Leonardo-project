@@ -22,6 +22,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.5",
+    "@react-oauth/google": "^0.12.1",
     "@tanstack/react-router": "^1.35.3",
     "@tanstack/router-devtools": "^1.35.3",
     "@tanstack/router-vite-plugin": "^1.35.4",
