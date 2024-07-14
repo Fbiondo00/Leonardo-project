@@ -19,6 +19,7 @@ import { Route as SignupImport } from './routes/signup'
 import { Route as SearchImport } from './routes/search'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
+import { Route as EditorwelfareImport } from './routes/editorwelfare'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -63,6 +64,11 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EditorwelfareRoute = EditorwelfareImport.update({
+  path: '/editorwelfare',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -77,6 +83,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/editorwelfare': {
+      id: '/editorwelfare'
+      path: '/editorwelfare'
+      fullPath: '/editorwelfare'
+      preLoaderRoute: typeof EditorwelfareImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -142,6 +155,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  EditorwelfareRoute,
   LoginRoute,
   ProfileRoute,
   SearchRoute,
@@ -161,6 +175,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/editorwelfare",
         "/login",
         "/profile",
         "/search",
@@ -173,6 +188,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/editorwelfare": {
+      "filePath": "editorwelfare.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
