@@ -1,33 +1,24 @@
-import LNavBar from "./LeonardoNavBar"
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
-import { CardOver } from "@/components/ui/CardOver";
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { CardOverCarosel } from "@/components/ui/CardOverCarosel";
 
-const FormSchema = z.object({
-  search: z.string(),
-})
+interface CarouselHomePageProps {}
 
-export const SearchPage = () => {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      search: "",
-    },
-  })
+const CarouselHomePage: React.FC<CarouselHomePageProps> = () => {
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
 
+  // Dati di esempio per le carte
 	const cards = [
 		{
 		  title: "Card 1",
@@ -61,45 +52,37 @@ export const SearchPage = () => {
 		},
 	  ];
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
-  }
-
   return (
-    <div className="relative flex flex-col items-center w-full min-h-screen bg-gray-800">
-      <div className="fixed inset-0 w-full h-full bg-leonardoWhite bg-contain bg-no-repeat bg-center filter opacity-20"></div>
-      <LNavBar icon={3} />
-      <Card className="w-full max-w-md mt-4 p-6 z-10">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex space-x-4 items-stretch">
-            <FormField
-              control={form.control}
-              name="search"
-              render={({ field }) => (
-                <FormItem className="flex-grow">
-                  <FormControl>
-                    <Input placeholder="search" {...field} className="h-full" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
-      </Card>
-      <div className="w-full px-20 mt-10 pb-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {cards.map(card => (
-            <CardOver
-              title={card.title}
-              description={card.description}
-              background={card.background}
-              over={card.over}
-            />
+    <div className="w-full flex justify-center">
+      <Carousel
+        plugins={[plugin.current]}
+        className="w-full h-auto bg-transparent rounded-3xl overflow-hidden"
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+      >
+        <CarouselContent>
+          {cards.map((card, index) => (
+            <CarouselItem key={index} className="basis 1/1 md:basis-1/2 lg:basis-1/3">
+              <div className="h-full">
+                <Card className="w-full h-96">
+                  <CardContent className="h-full p-0">
+                    <CardOverCarosel
+                      title={card.title}
+                      description={card.description}
+                      background={card.background}
+                      over={card.over}
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
           ))}
-        </div>
-      </div>
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
-  )
-}
+  );
+};
+
+export default CarouselHomePage;

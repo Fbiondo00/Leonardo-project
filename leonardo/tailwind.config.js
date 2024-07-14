@@ -23,6 +23,7 @@ module.exports = {
 		},
 		backgroundImage: {
 		  "loginForm": "url('./src/assets/login.png')",
+		  "leonardoWhite": "url('./src/assets/login1.png')",
 
 		},
 		welfareison:{

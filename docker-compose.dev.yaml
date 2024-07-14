@@ -6,6 +6,10 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=leonardo
       - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_pass
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - 27017:27017
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 1m30s
@@ -14,6 +18,8 @@ services:
       start_period: 30s
     secrets:
       - mongo_pass
+    networks:
+      - leonardo
 
   frontend:
     image: node:latest
@@ -26,6 +32,8 @@ services:
       - 5173
     ports:
       - 5173:5173
+    networks:
+      - leonardo
 
   backend:
     build:
@@ -34,9 +42,15 @@ services:
     environment:
       - MONGO_USER=leonardo
       - MONGO_PASSWORD_FILE=/run/secrets/mongo_pass
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
       - SECRET_KEY_FILE=/run/secrets/secret_key
       - DEBUG=false
-      - FLASK_PORT=1447
+      - FLASK_PORT=1337
+      - GOOGLE_CLIENT_ID_FILE=/run/secrets/google_oauth_client
+      - GOOGLE_CLIENT_SECRET_FILE=/run/secrets/google_oauth_secrets
+    networks:
+      - leonardo
     volumes:
       - ./flask:/app
     expose:
@@ -49,6 +63,8 @@ services:
     secrets:
       - mongo_pass
       - secret_key
+      - google_oauth_secrets
+      - google_oauth_client
   web:
     image: nginx
     environment:
@@ -60,6 +76,8 @@ services:
     command: "nginx -g 'daemon off;'"
     ports:
       - 80:8080
+    networks:
+      - leonardo
     depends_on:
       frontend:
         condition: service_started
@@ -83,3 +101,7 @@ secrets:
     file: secrets/secret_key
   mongo_pass:
     file: secrets/mongodb_password
+  google_oauth_secrets:
+    file: secrets/google_oauth_client_secret
+  google_oauth_client:
+    file: secrets/google_oauth_client_id

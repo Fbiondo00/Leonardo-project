@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { Link } from "@tanstack/react-router";
 import { SignapStep1 } from "./SignapStep1";
@@ -24,10 +24,10 @@ export function RegisterForm() {
   const [step, setStape] = useState<number>(0)
 
   const HandleFirstSubmit = () => {
-    // if (step < 1 && allInfo?.email != undefined && allInfo?.fullName != undefined && allInfo?.username != undefined && allInfo?.password != undefined)
-    // {
-     setStape(step => step + 1);
-    // }
+    if (step < 1 && allInfo?.email != undefined && allInfo?.fullName != undefined && allInfo?.username != undefined && allInfo?.password != undefined)
+    {
+      setStape(step => step + 1);
+    }
   };
 
   const HandleSubmitBack = () => {
