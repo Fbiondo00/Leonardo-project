@@ -1,0 +1,14 @@
+python-decouple
+setuptools>=68.2.2
+Flask-Pymongo>=2.3.0
+MarkupSafe>=2.1.5
+flask>=3.0.3
+pymongo>=4.7.3
+Flask-Login
+Flask-Bcrypt
+gunicorn
+requests
+Flask-Cors
+authlib
+flask-oauthlib
+werkzeug>=3.0.0
